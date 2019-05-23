@@ -1,0 +1,86 @@
+<?php
+
+namespace src_namespace__\Core;
+
+use Webmozart\Assert\Assert;
+use src_namespace__\functions as h;
+use src_namespace__\Core\Config;
+use src_namespace__\Common\Hooker_Trait;
+
+final class Plugin {
+	use Hooker_Trait;
+
+	protected static $instance = null;
+
+	public static function get_instance ( $main_file = null ) {
+		if ( null === self::$instance ) {
+			self::$instance = new self( $main_file );
+		}
+		return self::$instance;
+	}
+
+	public static function run ( $main_file ) {
+		return self::get_instance( $main_file );
+	}
+
+	protected function __construct ( $main_file ) {
+		Config::setup( $main_file );
+		$this->includes();
+		$this->add_hooks();
+	}
+
+	protected function includes () {
+		require_once h\config_get( 'ROOT_DIR' ) . '/load.php';
+	}
+
+	protected function add_hooks () {
+		// try to boot
+		\do_action( h\prefix( 'pre_boot' ) );
+		$should_boot = \apply_filters( h\prefix( 'should_boot' ), true );
+		if ( ! $should_boot ) return;
+		$this->add_action( 'plugins_loaded', 'boot' );
+
+		// try to init
+		\do_action( h\prefix( 'pre_init' ) );
+		$should_init = \apply_filters( h\prefix( 'should_init' ), true );
+		if ( ! $should_init ) return;
+		$this->add_action( 'init', 'init' );
+	}
+
+	public function boot () {
+		$this->load_classes( 'boot' );
+		\do_action( h\prefix( 'after_boot' ) );
+	}
+
+	public function init () {
+		$this->add_action( 'init', 'load_plugin_textdomain', 0 );
+		$this->load_classes( 'init' );
+		\do_action( h\prefix( 'after_init' ) );
+	}
+
+	public function load_classes ( $context ) {
+		$wp_hook = h\config_get( 'HOOK_' . \strtoupper( $context ) );
+		$classes = \apply_filters( $wp_hook, [] );
+		$method = $context;
+
+		foreach ( $classes as $class_name ) {
+			$instance = h\config_get_instance( $class_name, false );
+
+			if ( false === $instance ) {
+				$instance = h\config_set_instance( $class_name );
+			}
+
+			Assert::methodExists( $instance, $method, "The $class_name class don't has ${method}() method." );
+
+			$instance->$method();
+		}
+	}
+
+	public function load_plugin_textdomain () {
+		\load_plugin_textdomain(
+			'{{plugin_text_domain}}',
+			false,
+			h\config_get( 'ROOT_DIR' ) . '/languages/'
+		);
+	}
+}
