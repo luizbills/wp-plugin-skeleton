@@ -2,7 +2,6 @@
 
 namespace src_namespace__\Core;
 
-use Webmozart\Assert\Assert;
 use src_namespace__\Utils\Immutable_Data_Store;
 use src_namespace__\functions as h;
 
@@ -38,7 +37,6 @@ class Config {
 	}
 
 	public static function set ( $key, $value ) {
-		Assert::notNull( $value, __CLASS__ . ": can't store 'null'. Got: %s" );
 		return self::get_options()->set( $key, $value );
 	}
 
@@ -46,7 +44,10 @@ class Config {
 		if ( self::get_options()->has( $key ) ) {
 			return self::get_options()->get( $key );
 		}
-		Assert::notNull( $default, __CLASS__ . ": not found '$key' key. Got: %s" );
+		h\throw_if(
+			is_null( $default ),
+			__CLASS__ . sprintf( ": not found '$key' key" )
+		);
 		return $default;
 	}
 }

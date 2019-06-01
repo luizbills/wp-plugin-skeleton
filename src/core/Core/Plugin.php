@@ -2,7 +2,6 @@
 
 namespace src_namespace__\Core;
 
-use Webmozart\Assert\Assert;
 use src_namespace__\functions as h;
 use src_namespace__\Core\Config;
 use src_namespace__\Common\Hooker_Trait;
@@ -70,7 +69,10 @@ final class Plugin {
 				$instance = h\config_set_instance( $class_name );
 			}
 
-			Assert::methodExists( $instance, $method, "The $class_name class don't has ${method}() method." );
+			h\throw_if(
+				! \method_exists( $instance, $method ),
+				"The $class_name class don't has $method() method."
+			);
 
 			$instance->$method();
 		}

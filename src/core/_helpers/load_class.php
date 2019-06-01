@@ -2,8 +2,6 @@
 
 namespace src_namespace__\functions;
 
-use Webmozart\Assert\Assert;
-
 function load_class ( $class, $context = 'init', $hook_priority = 10 ) {
 	$context = \strtoupper( $context );
 	$contexts = \apply_filters(
@@ -11,8 +9,10 @@ function load_class ( $class, $context = 'init', $hook_priority = 10 ) {
 		[ 'INIT', 'BOOT' ]
 	);
 
-	Assert::oneOf( $context, $contexts, 'Invalid context argument.' );
+	throw_if(
+		! isset( $contexts[ $context ] ),
+		'Invalid context argument.'
+	);
 
-	$wp_hook = config_get( "HOOK_$context" );
-	\add_filter( $wp_hook, return_push_value( $class ), $hook_priority );
+	\add_filter( config_get( "HOOK_$context" ), return_push_value( $class ), $hook_priority );
 }
