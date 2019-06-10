@@ -86,6 +86,11 @@ final class Plugin_Dependencies {
 		return false;
 	}
 
+	protected function is_plugin_active ( $plugin_main_file ) {
+		include_once( \ABSPATH . 'wp-admin/includes/plugin.php' );
+		return \is_plugin_active( $plugin_main_file );
+	}
+
 	protected function compare_version ( $version1, $version2, $operator = '>=' ) {
 		return version_compare( strtolower( $version1 ), strtolower( $version2 ), $operator );
 	}
