@@ -18,4 +18,12 @@ if ( ! defined( 'WPINC' ) ) die();
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/core/load_helpers.php';
 
-src_namespace__\Core\Plugin::run( __FILE__ );
+use src_namespace__\functions as h;
+
+if ( h\get_defined( 'WP_DEBUG' ) && h\get_defined( 'WP_DEBUG_DISPLAY' ) ) {
+	$whoops = h\config_set( 'whoops_instance', new \Whoops\Run() );
+	$whoops->pushHandler( new \Whoops\Handler\PrettyPageHandler() );
+	$whoops->register();
+}
+
+\src_namespace__\Core\Plugin::run( __FILE__ );
