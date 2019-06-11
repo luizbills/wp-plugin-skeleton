@@ -2,29 +2,16 @@
 
 namespace src_namespace__\functions;
 
-function log_debug () {
-	$is_enabled = \apply_filters( prefix( 'log_debug_enabled' ), get_defined( 'WP_DEBUG_LOG', false ) );
-
-	if ( ! $is_enabled ) return;
-
-	$args = \func_get_args();
-	$plugin_slug = config_get( 'SLUG' );
-	$message = '';
-
-	foreach( $args as $arg ) {
-		if ( null === $arg ) {
-			$message .= 'Null';
-		}
-		elseif ( \is_bool( $arg ) ) {
-			$message .= $arg ? 'True' : 'False';
-		}
-		elseif ( ! \is_string( $arg ) ) {
-			$message .= print_r( $arg, true );
-		} else {
-			$message .= $arg;
-		}
-		$message .= ' ';
+function throw_if ( $condition, $message, $code = 0 ) {
+	$is_enabled = \apply_filters( 'debug_throw_if_enabled', true, $message, $code );
+	if ( $is_enabled && $condition ) {
+		throw new \ErrorException( $message, $code = 0 );
 	}
+	return $condition;
+}
 
-	\error_log( "$plugin_slug: $message" );
+function log ( ...$args ) {
+	$is_enabled = \apply_filters( prefix( 'debug_log_enabled' ), get_defined( 'WP_DEBUG_LOG', false ) );
+	if ( ! $is_enabled ) return;
+	\error_log( config_get( 'SLUG' ) . ': ' . format( $args ) );
 }
