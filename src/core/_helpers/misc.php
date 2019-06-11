@@ -26,3 +26,24 @@ function get_defined ( $key, $default = '' ) {
 	}
 	return $default;
 }
+
+function format ( ...$args ) {
+	$message = '';
+
+	foreach( $args as $arg ) {
+		if ( null === $arg ) {
+			$message .= 'Null';
+		}
+		elseif ( \is_bool( $arg ) ) {
+			$message .= $arg ? 'True' : 'False';
+		}
+		elseif ( ! \is_string( $arg ) ) {
+			$message .= print_r( $arg, true );
+		} else {
+			$message .= $arg;
+		}
+		$message .= ' ';
+	}
+
+	return $message;
+}
