@@ -16,8 +16,6 @@ class Config {
 	}
 
 	public static function setup ( $main_file ) {
-		if ( ! null === self::$options ) return;
-
 		$root = \dirname( $main_file );
 		$plugin_config = include_once $root . '/config.php';
 		$plugin_slug = h\str_slug( $plugin_config['NAME'] );
