@@ -7,7 +7,7 @@ namespace src_namespace__\functions;
 
 function remember_cache ( $key, $callback, $expire = 0 ) {
 	if ( \apply_filters( prefix( 'remember_cache_disabled' ), false, $key ) ) {
-		log_debug( "function remember_cache disabled for $key" );
+		log( "function remember_cache disabled for $key" );
 		return $callback();
 	}
 
@@ -26,7 +26,7 @@ function remember_cache ( $key, $callback, $expire = 0 ) {
 	if ( false !== $value && null !== $value && ! \is_wp_error( $value ) ) {
 		$expire = \apply_filters( prefix( 'remember_cache_expiration' ), $expire, $key );
 		\set_transient( $transient_key, $value, $expire );
-		log_debug( "function remember_cache store key $key with value:", $value );
+		log( "function remember_cache store key $key with value:", $value );
 	}
 
 	return $value;
@@ -41,7 +41,7 @@ function forget_cache ( $key, $default = null ) {
 
 	if ( false !== $cached ) {
 		\delete_transient( $key );
-		log_debug( "function remember_cache deleted key $key with value:", $cached );
+		log( "function remember_cache deleted key $key with value:", $cached );
 		return $cached;
 	}
 	return $default;

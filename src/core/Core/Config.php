@@ -37,6 +37,7 @@ class Config {
 	}
 
 	public static function set ( $key, $value ) {
+		h\throw_if( null === $value, "Can't store 'null'." );
 		return self::get_options()->set( $key, $value );
 	}
 
@@ -44,10 +45,7 @@ class Config {
 		if ( self::get_options()->has( $key ) ) {
 			return self::get_options()->get( $key );
 		}
-		h\throw_if(
-			is_null( $default ),
-			__CLASS__ . sprintf( ": not found '$key' key" )
-		);
+		h\throw_if( null === $default, "Not found '$key' key." );
 		return $default;
 	}
 }

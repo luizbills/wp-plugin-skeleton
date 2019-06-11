@@ -1,6 +1,6 @@
 <?php
 
-namespace WC_Omie\functions;
+namespace src_namespace__\functions;
 
 function safe_json_encode ( $string ) {
 	$result = @json_encode( $string, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE );

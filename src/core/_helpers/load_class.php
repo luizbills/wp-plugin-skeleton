@@ -9,10 +9,8 @@ function load_class ( $class, $context = 'init', $hook_priority = 10 ) {
 		[ 'INIT', 'BOOT' ]
 	);
 
-	throw_if(
-		! isset( $contexts[ $context ] ),
-		'Invalid context argument.'
-	);
+	throw_if( ! in_array( $context, $contexts ), 'Invalid context argument.' );
 
-	\add_filter( config_get( "HOOK_$context" ), return_push_value( $class ), $hook_priority );
+	$wp_hook = config_get( "HOOK_$context" );
+	\add_filter( $wp_hook, return_push_value( $class ), $hook_priority );
 }

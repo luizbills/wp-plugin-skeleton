@@ -75,7 +75,7 @@ class Asset_Manager {
 					$in_footer
 				);
 
-				h\log_debug(
+				h\log(
 					sprintf(
 						'Enqueued %s: handle=%s src=%s',
 						\strtoupper( $type ),

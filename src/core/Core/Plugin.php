@@ -71,7 +71,7 @@ final class Plugin {
 
 			h\throw_if(
 				! \method_exists( $instance, $method ),
-				"The $class_name class don't has $method() method."
+				"The $class_name class don't has ${method}() method."
 			);
 
 			$instance->$method();

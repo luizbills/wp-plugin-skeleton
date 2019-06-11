@@ -12,10 +12,6 @@ class Data_Store {
 	}
 
 	public function set ( $key, $value ) {
-		h\throw_if(
-			is_null( $value ),
-			__CLASS__ . sprintf( ": can't store 'null'." )
-		);
 		$this->data[ $key ] = $value;
 		return $this->data[ $key ];
 	}
