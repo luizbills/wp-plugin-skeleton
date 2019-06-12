@@ -11,7 +11,7 @@ function value ( $value, $default = '' ) {
 // e.g.: request_value( 'foo' ) returns $_GET['foo'] in GET requests
 function request_value ( $key, $default = '' ) {
 	$method = $_SERVER['REQUEST_METHOD'];
-	return array_get( "_$method", $key, $default );
+	return array_get( $GLOBALS["_$method"], $key, $default );
 }
 
 function maybe_define ( $key, $value = true ) {
