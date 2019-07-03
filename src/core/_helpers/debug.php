@@ -15,3 +15,8 @@ function log ( ...$args ) {
 	if ( ! $is_enabled ) return;
 	\error_log( config_get( 'SLUG' ) . ': ' . format( ...$args ) );
 }
+
+function dd ( $value ) {
+	var_dump( $value );
+	die(1);
+}
