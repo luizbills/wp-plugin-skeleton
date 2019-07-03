@@ -20,7 +20,7 @@ require_once __DIR__ . '/core/load_helpers.php';
 
 use src_namespace__\functions as h;
 
-if ( h\get_defined( 'WP_DEBUG' ) && h\get_defined( 'WP_DEBUG_DISPLAY' ) ) {
+if ( ! h\get_defined( 'DOING_AJAX' ) && h\get_defined( 'WP_DEBUG' ) && h\get_defined( 'WP_DEBUG_DISPLAY' ) ) {
 	$whoops = h\config_set( 'whoops_instance', new \Whoops\Run() );
 	$whoops->pushHandler( new \Whoops\Handler\PrettyPageHandler() );
 	$whoops->register();
