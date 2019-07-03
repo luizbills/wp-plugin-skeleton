@@ -15,6 +15,7 @@ abstract class Abstract_Shortcode {
 	}
 
 	public function callback ( $atts, $content = '', $tag = '' ) {
+		$atts = empty( $atts ) ? [] : $atts;
 		$atts = \array_merge( $atts, $this->get_default_attributes() );
 		if ( $this->validate_attributes( $atts ) ) {
 			return $this->get_output( $atts, $content );
