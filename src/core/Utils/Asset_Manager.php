@@ -72,7 +72,7 @@ class Asset_Manager {
 					$src,
 					$deps,
 					$version,
-					$in_footer
+					'js' == $type ? $in_footer : $media
 				);
 
 				h\log(
