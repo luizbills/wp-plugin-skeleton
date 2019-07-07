@@ -22,8 +22,14 @@ class Config {
 		$plugin_prefix = h\str_slug( $plugin_config['NAME'], '_' ) . '_';
 		$options = self::get_options();
 
-		$options->set( 'SLUG', $plugin_slug );
-		$options->set( 'PREFIX', $plugin_prefix );
+		if ( ! isset( $plugin_config['SLUG'] ) ) {
+			$plugin_config['SLUG'] = h\str_slug( $plugin_config['NAME'] );
+		}
+
+		if ( ! isset( $plugin_config['PREFIX'] ) ) {
+			$plugin_config['PREFIX'] = h\str_slug( $plugin_config['SLUG'], '_' ) . '_';
+		}
+
 		$options->set( 'MAIN_FILE', $main_file );
 		$options->set( 'ROOT_DIR', $root );
 		$options->set( 'HOOK_BOOT', $plugin_prefix . 'boot_plugin' );
