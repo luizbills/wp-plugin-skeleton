@@ -14,13 +14,14 @@ function request_value ( $key, $default = '' ) {
 	return array_get( $GLOBALS["_$method"], $key, $default );
 }
 
-function maybe_define ( $key, $value = true ) {
+function maybe_define ( $key, $value = true, $force_upper_case = true ) {
+	$key = $force_upper_case ? \strtoupper( $key ) : $key;
 	if ( ! defined( $key ) ) {
 		define( $key, $value );
 	}
 }
 
-function get_defined ( $key, $default = '' ) {
+function get_defined ( $key, $default = false ) {
 	if ( defined( $key ) ) {
 		return constant( $key );
 	}
