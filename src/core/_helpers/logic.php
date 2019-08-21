@@ -18,7 +18,6 @@ function any_equal ( $values, $target, $strict = false ) {
 	return false;
 }
 
-
 function none_equal ( $values, $target, $strict = false ) {
 	return ! any_equal( $values, $target, $strict );
 }
