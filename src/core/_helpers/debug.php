@@ -20,3 +20,10 @@ function dd ( $value ) {
 	var_dump( $value );
 	die(1);
 }
+
+function ddp ( $value ) {
+	echo '<pre>';
+	var_dump( $value );
+	echo '</pre>';
+	die(1);
+}
