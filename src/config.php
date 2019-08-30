@@ -8,4 +8,6 @@ return [
 ];
 
 // important: don't use reserved keys (they're used internally)
-// reserved keys = NAME, VERSION, SLUG, PREFIX, MAIN_FILE, ROOT_DIR
+// reserved keys = NAME, VERSION, MAIN_FILE, ROOT_DIR
+//
+// also important: SLUG and PREFIX is auto generated if you do not set them here
