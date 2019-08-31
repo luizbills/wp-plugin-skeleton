@@ -21,9 +21,13 @@ function dd ( $value ) {
 	die(1);
 }
 
-function ddp ( $value ) {
-	echo '<pre>';
-	var_dump( $value );
-	echo '</pre>';
+function dd ( $value ) {
+	if ( \function_exists( 'xdebug_enable' ) ) {
+		var_dump( $value );
+	} else {
+		echo '<pre>';
+		var_dump( $value );
+		echo '</pre>';
+	}
 	die(1);
 }
