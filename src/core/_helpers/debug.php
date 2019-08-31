@@ -17,11 +17,6 @@ function log ( ...$args ) {
 }
 
 function dd ( $value ) {
-	var_dump( $value );
-	die(1);
-}
-
-function dd ( $value ) {
 	if ( \function_exists( 'xdebug_enable' ) ) {
 		var_dump( $value );
 	} else {
