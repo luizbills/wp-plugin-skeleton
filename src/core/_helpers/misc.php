@@ -49,10 +49,11 @@ function format ( ...$args ) {
 	return $message;
 }
 
-function add_plugin_action_link ( $label, $url, $priority = 10 ) {
+function add_plugin_action_link ( $label, $url, $css_class = '', $priority = 10 ) {
 	$label = esc_html( $label );
+	$css_class = esc_attr( $css_class );
 	$url = esc_attr( $url );
-	$link = "<a href="$url">$label</url>";
+	$link = "<a class="$css_class" href="$url">$label</url>";
 	\add_filter(
 		'plugin_action_links_' . config_get( 'MAIN_FILE' ),
 		return_push_value( $link ),
