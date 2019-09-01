@@ -58,3 +58,8 @@ function str_starts_with ( $string, $search ) {
 function str_ends_with ( $string, $search ) {
 	return \substr( $string, -\strlen( $search ) ) === $search;
 }
+
+function str_add_quotes ( $string, $double = true ) {
+	$q = $double ? "\"" : '\'';
+	return $q . $string . $q;
+}

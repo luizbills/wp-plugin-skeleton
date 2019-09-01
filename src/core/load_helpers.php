@@ -8,5 +8,5 @@ $dir = __DIR__ . '/functions';
 include_once "$dir/file.php";
 
 foreach ( h\rscandir( $dir ) as $file ) {
-	include $file;
+	include_once $file;
 }

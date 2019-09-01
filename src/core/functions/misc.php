@@ -39,7 +39,7 @@ function format ( ...$args ) {
 			$message .= $arg ? 'True' : 'False';
 		}
 		elseif ( ! \is_string( $arg ) ) {
-			$message .= print_r( $arg, true );
+			$message .= \print_r( $arg, true );
 		} else {
 			$message .= $arg;
 		}
@@ -49,13 +49,21 @@ function format ( ...$args ) {
 	return $message;
 }
 
-function add_plugin_action_link ( $label, $url, $css_class = '', $priority = 10 ) {
-	$label = esc_html( $label );
-	$css_class = esc_attr( $css_class );
-	$url = esc_attr( $url );
-	$link = "<a class="$css_class" href="$url">$label</url>";
+function build_tag_attributes ( $atts_array ) {
+	$result = '';
+	foreach ( $atts_array as $key => $value) {
+		$result .= ' ' . \esc_html( $key ) . '=' . str_add_quotes( \esc_attr( $value ) );
+	}
+	return \trim( $result );
+}
+
+function add_plugin_action_link ( $label, $url, $atts_array = [], $priority = 10 ) {
+	$label = \esc_html( $label );
+	$url = \esc_attr( $url );
+	$atts = build_tag_attributes( $atts_array );
+	$link = "<a href='$url' $atts>$label</url>";
 	\add_filter(
-		'plugin_action_links_' . config_get( 'MAIN_FILE' ),
+		'plugin_action_links_' . \plugin_basename( config_get( 'MAIN_FILE' ) ),
 		return_push_value( $link ),
 		$priority
 	);
