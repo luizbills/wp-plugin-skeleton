@@ -17,16 +17,6 @@ function get_php_template ( $template_path, $data = [] ) {
 	return ob_get_clean();
 }
 
-function register_template_filter( $name, $callback ) {
-	$filters = config_get( '_template_filers', false );
-	if ( false === $filters ) {
-		$filters = new \stdClass();
-		$filters->list = [];
-		config_set( '_template_filers', $filters );
-	}
-	$filters->list[ $name ] = $callback;
-}
-
 function v ( $value, ...$filters ) {
 	$escaped = \preg_grep( '/^esc_/', $filters );
 	if ( ! in_array( 'raw' , $filters ) && ! $escaped ) {
@@ -48,6 +38,16 @@ function v ( $value, ...$filters ) {
 	}
 
 	return $value;
+}
+
+function register_template_filter ( $name, $callback ) {
+	$filters = config_get( '_template_filers', false );
+	if ( false === $filters ) {
+		$filters = new \stdClass();
+		$filters->list = [];
+		config_set( '_template_filers', $filters );
+	}
+	$filters->list[ $name ] = $callback;
 }
 
 function register_default_template_filters () {
