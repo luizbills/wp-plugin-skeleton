@@ -26,7 +26,8 @@ final class Plugin {
 		Config::setup( $main_file );
 		$this->includes();
 		$this->add_hooks();
-		$this->register_template_filters();
+		
+		h\register_default_template_filters();
 	}
 
 	protected function includes () {
@@ -87,24 +88,5 @@ final class Plugin {
 			false,
 			h\config_get( 'ROOT_DIR' ) . '/languages/'
 		);
-	}
-
-	protected function register_template_filters () {
-		// register default template filters
-		h\register_template_filter( 'esc_html', 'esc_html' );
-		h\register_template_filter( 'esc_attr', 'esc_attr' );
-		h\register_template_filter( 'esc_js', 'esc_js' );
-		h\register_template_filter( 'esc_url', 'esc_url' );
-		h\register_template_filter( 'capitalize', 'ucfirst' );
-		h\register_template_filter( 'int', 'intval' );
-		h\register_template_filter( 'float', 'floatval' );
-		h\register_template_filter( 'abs', 'abs' );
-		h\register_template_filter( 'round', 'round' );
-		h\register_template_filter( 'lowercase', function ( $value ) {
-			return h\str_lower( $value );
-		} );
-		h\register_template_filter( 'uppercase', function ( $value ) {
-			return h\str_upper( $value );
-		} );
 	}
 }
