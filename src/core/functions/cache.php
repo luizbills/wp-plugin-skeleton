@@ -51,3 +51,60 @@ function forget_cache ( $key, $default = null ) {
 	}
 	return $default;
 }
+
+function clear_plugin_cache () {
+	if ( wp_using_ext_object_cache() ) {
+		return;
+	}
+
+	global $wpdb;
+	$prefix = prefix();
+
+	$wpdb->query(
+		$wpdb->prepare(
+			"DELETE a, b FROM {$wpdb->options} a, {$wpdb->options} b
+			WHERE a.option_name LIKE %s
+			AND a.option_name NOT LIKE %s
+			AND b.option_name LIKE %s
+			AND b.option_value > %d",
+			$wpdb->esc_like( "_transient_$prefix" ) . '%',
+			$wpdb->esc_like( "_transient_timeout_$prefix" ) . '%',
+			$wpdb->esc_like( "_transient_timeout_$prefix" ) . '%',
+			time()
+		)
+	);
+
+	if ( ! is_multisite() ) {
+		// non-Multisite stores site transients in the options table.
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE a, b FROM {$wpdb->options} a, {$wpdb->options} b
+				WHERE a.option_name LIKE %s
+				AND a.option_name NOT LIKE %s
+				AND b.option_name LIKE %s
+				AND b.option_value > %d",
+				$wpdb->esc_like( "_site_transient_$prefix" ) . '%',
+				$wpdb->esc_like( "_site_transient_timeout_$prefix" ) . '%',
+				$wpdb->esc_like( "_site_transient_timeout_$prefix" ) . '%',
+				time()
+			)
+		);
+	} elseif ( is_multisite() && is_main_site() && is_main_network() ) {
+		// Multisite stores site transients in the sitemeta table.
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE a, b FROM {$wpdb->sitemeta} a, {$wpdb->sitemeta} b
+				WHERE a.meta_key LIKE %s
+				AND a.meta_key NOT LIKE %s
+				AND b.option_name LIKE %s
+				AND b.meta_value > %d",
+				$wpdb->esc_like( "_site_transient_$prefix" ) . '%',
+				$wpdb->esc_like( "_site_transient_timeout_$prefix" ) . '%',
+				$wpdb->esc_like( "_site_transient_timeout_$prefix" ) . '%',
+				time()
+			)
+		);
+	}
+
+	log_debug( 'CACHE CLEARED' );
+}
