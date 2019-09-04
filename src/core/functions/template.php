@@ -49,3 +49,35 @@ function v ( $value, ...$filters ) {
 
 	return $value;
 }
+
+function register_default_template_filters () {
+	if ( config_get( 'template_filters_registered', false ) ) return;  
+
+	register_template_filter( 'esc_html', 'esc_html' );
+
+	register_template_filter( 'esc_attr', 'esc_attr' );
+
+	register_template_filter( 'esc_js', 'esc_js' );
+
+	register_template_filter( 'esc_url', 'esc_url' );
+
+	register_template_filter( 'capitalize', 'ucfirst' );
+
+	register_template_filter( 'int', 'intval' );
+
+	register_template_filter( 'float', 'floatval' );
+
+	register_template_filter( 'abs', 'abs' );
+
+	register_template_filter( 'round', 'round' );
+
+	register_template_filter( 'lowercase', function ( $value ) {
+		return h\str_lower( $value );
+	} );
+
+	register_template_filter( 'uppercase', function ( $value ) {
+		return h\str_upper( $value );
+	} );
+
+	config_set( 'template_filters_registered', true );
+}
