@@ -6,7 +6,12 @@
 namespace src_namespace__\functions;
 
 function remember_cache ( $key, $callback, $expire = 0 ) {
-	if ( \apply_filters( prefix( 'remember_cache_disabled' ), false, $key ) ) {
+	$cache_disabled = \apply_filters(
+		prefix( 'remember_cache_disabled' ),
+		config_get( 'DISABLE_CACHE', false ),
+		$key
+	);
+	if ( $cache_disabled ) {
 		log( "function remember_cache disabled for $key" );
 		return $callback();
 	}

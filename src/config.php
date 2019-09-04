@@ -4,7 +4,10 @@
 return [
 	'ASSETS_DIR' => 'assets',
 	'TEMPLATES_DIR' => 'templates',
-	'LANGUAGES_DIR' => 'languages'
+	'LANGUAGES_DIR' => 'languages',
+	
+	// disable the plugin cache while in development or debugging
+	'DISABLE_CACHE' => WP_DEBUG,
 ];
 
 // important: don't use reserved keys (they're used internally)
