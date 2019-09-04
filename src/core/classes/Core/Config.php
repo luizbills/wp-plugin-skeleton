@@ -43,10 +43,6 @@ class Config {
 			$plugin_config['PREFIX'] = h\str_slug( $plugin_name, '_' ) . '_';
 		}
 
-		// default hooks for load classes
-		$plugin_config['HOOK_BOOT'] = $plugin_config['PREFIX'] . 'boot_plugin';
-		$plugin_config['HOOK_INIT'] = $plugin_config['PREFIX'] . 'init_plugin';
-
 		foreach ( $plugin_config as $key => $value ) {
 			$options->set( $key, $value );
 		}
