@@ -35,7 +35,7 @@ final class Plugin {
 
 	protected function add_hooks () {
 		// try to boot
-		\do_action( h\prefix( 'pre_boot' ) );
+		$this->pre_boot();
 		$should_boot = \apply_filters( h\prefix( 'should_boot' ), true );
 		if ( ! $should_boot ) return;
 		$this->add_action( 'plugins_loaded', 'boot' );
@@ -47,9 +47,12 @@ final class Plugin {
 		$this->add_action( 'init', 'init' );
 	}
 
+	public function pre_boot () {
+		$this->load_classes( 'pre_boot' );
+	}
+
 	public function boot () {
 		$this->load_classes( 'boot' );
-		\do_action( h\prefix( 'after_boot' ) );
 	}
 
 	public function init () {
@@ -58,10 +61,9 @@ final class Plugin {
 		\do_action( h\prefix( 'after_init' ) );
 	}
 
-	public function load_classes ( $context ) {
-		$wp_hook = h\config_get( 'HOOK_' . \strtoupper( $context ) );
+	public function load_classes ( $method ) {
+		$wp_hook = h\get_load_class_hook( $method );
 		$classes = \apply_filters( $wp_hook, [] );
-		$method = $context;
 
 		foreach ( $classes as $class_name ) {
 			$instance = h\config_get_instance( $class_name, false );
