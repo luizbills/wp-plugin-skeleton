@@ -128,8 +128,7 @@ class Asset_Manager {
 			$defaults['in_footer'] = true;
 			$defaults['script_data'] = null;
 		}
-
-		if ( 'css' == $type ) {
+		elseif ( 'css' == $type ) {
 			$defaults['media'] = 'all';
 		}
 
