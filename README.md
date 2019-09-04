@@ -20,6 +20,13 @@ git clone https://github.com/luizbills/wp-plugin-skeleton.git _skeleton \
 && ls -Apl
 ```
 
+## Features
+
+- Simple installation (see above)
+- Several [helper functions](src/core/functions)
+- Easy [static file management](src/core/classes/Utils/Asset_Manager.php)
+- Powerful [template helpers](src/core/functions/template.php)
+
 ## Contributing
 
 - For features or bug fixes, follow the [CONTRIBUTING guide](CONTRIBUTING.md).
