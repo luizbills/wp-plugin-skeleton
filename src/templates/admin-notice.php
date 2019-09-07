@@ -1,4 +1,4 @@
-<?php /** read more about `v` function in core/functions/templater.php */ ?>
-<div class="notice <?= v( $class, 'esc_attr' ) ?>">
-	<p><?= v( $message, 'raw' ) ?></p>
+<?php /** read more about `v` function in https://github.com/luizbills/v */ ?>
+<div class="notice <?= v( $var['class'] ) ?>">
+	<p><?= v( $var['message'], 'raw', 'safe_html' ) ?></p>
 </div>

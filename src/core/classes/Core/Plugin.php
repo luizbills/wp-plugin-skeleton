@@ -24,10 +24,13 @@ final class Plugin {
 
 	protected function __construct ( $main_file ) {
 		Config::setup( $main_file );
+
 		$this->includes();
 		$this->add_hooks();
-		
-		h\register_default_template_filters();
+
+		if ( function_exists( 'v' ) ) {
+			h\register_custom_v_filters();
+		}
 	}
 
 	protected function includes () {
