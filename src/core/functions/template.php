@@ -5,10 +5,12 @@ namespace src_namespace__\functions;
 function include_php_template ( $template_path, $data = [] ) {
 	$template_base_path = config_get( 'ROOT_DIR' ) . '/' . config_get( 'TEMPLATES_DIR' );
 	$template_path = "$template_base_path/$template_path";
-	$data = apply_filters( prefix( 'template_default_data' ), $data );
+	$var = \apply_filters( prefix( 'template_default_data' ), $data );
+	$v_context = config_get( 'SLUG' );
 
-	extract( $data, \EXTR_OVERWRITE );
+	v_set_context( $v_context );
 	require $template_path;
+	v_reset_context();
 }
 
 function get_php_template ( $template_path, $data = [] ) {
@@ -17,73 +19,28 @@ function get_php_template ( $template_path, $data = [] ) {
 	return ob_get_clean();
 }
 
-function v ( $value, ...$filters ) {
-	$escaped = \preg_grep( '/^esc_/', $filters );
-	if ( ! in_array( 'raw' , $filters ) && ! $escaped ) {
-		$filters[] = 'esc_html';
-	}
+function register_custom_v_filters () {
+	if ( config_get( 'custom_v_filters_registered', false ) ) return;
 
-	$callbacks = config_get( '_template_filers', false );
+	$context = config_get( 'SLUG' );
 
-	if ( false !== $callbacks ) {
-		$callbacks = $callbacks->list;
-		foreach ( $filters as $name ) {
-			if ( 'raw' == $name ) continue;
-			if ( isset( $callbacks[ $name ] ) ) {
-				$value = \call_user_func( $callbacks[ $name ], $value );
-			} else {
-				throw_if( true, "unexpected '$name' template filter." );
-			}
-		}
-	}
+	\v_register_filter(
+		'with_prefix',
+		function ( $value, $args ) {
+			return prefix( $value );
+		},
+		$context
+	);
 
-	return $value;
-}
+	\v_register_filter(
+		'with_slug',
+		function ( $value, $args ) {
+			return config_get( 'SLUG' ) . '-' . $value;
+		},
+		$context
+	);
 
-function register_template_filter ( $name, $callback ) {
-	$filters = config_get( '_template_filers', false );
-	if ( false === $filters ) {
-		$filters = new \stdClass();
-		$filters->list = [];
-		config_set( '_template_filers', $filters );
-	}
-	$filters->list[ $name ] = $callback;
-}
+	\do_action( prefix( 'register_v_filters' ) );
 
-function register_default_template_filters () {
-	if ( config_get( 'template_filters_registered', false ) ) return;  
-
-	register_template_filter( 'esc_html', 'esc_html' );
-
-	register_template_filter( 'esc_attr', 'esc_attr' );
-
-	register_template_filter( 'esc_js', 'esc_js' );
-
-	register_template_filter( 'esc_url', 'esc_url' );
-
-	register_template_filter( 'capitalize', 'ucfirst' );
-
-	register_template_filter( 'int', 'intval' );
-
-	register_template_filter( 'float', 'floatval' );
-
-	register_template_filter( 'abs', 'abs' );
-
-	register_template_filter( 'round', 'round' );
-
-	register_template_filter( 'lowercase', function ( $value ) {
-		return h\str_lower( $value );
-	} );
-
-	register_template_filter( 'uppercase', function ( $value ) {
-		return h\str_upper( $value );
-	} );
-	
-	// for debug
-	register_template_filter( 'log', function ( $value ) {
-		log( 'template variable =', $value );
-		return $value;
-	} );
-
-	config_set( 'template_filters_registered', true );
+	config_set( 'custom_v_filters_registered', true );
 }
