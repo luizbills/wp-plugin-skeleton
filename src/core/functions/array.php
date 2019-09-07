@@ -2,6 +2,18 @@
 
 namespace src_namespace__\functions;
 
+function wrap ( $value ) {
+	return \is_array( $value ) ? $value : [ $value ];
+}
+
+function array_get ( $arr, $key, $default = null ) {
+	$value = $default;
+	if ( isset( $arr[ $key ] ) ) {
+		$value = $arr[ $key ];
+	}
+	return $value;
+}
+
 function array_head ( $arr ) {
 	return \reset( $arr );
 }
@@ -12,14 +24,6 @@ function array_tail ( $arr ) {
 
 function array_divide ( $arr ) {
 	return [ \array_keys( $arr ), \array_values( $arr ) ];
-}
-
-function array_get ( $arr, $key, $default = null ) {
-	$value = $default;
-	if ( isset( $arr[ $key ] ) ) {
-		$value = $arr[ $key ];
-	}
-	return $value;
 }
 
 function array_pull ( &$arr, $key, $default = null ) {
@@ -52,13 +56,10 @@ function array_group_by_prefix ( $arr, $prefix ) {
 	return $group;
 }
 
-function wrap ( $value ) {
-	return \is_array( $value ) ? $value : [ $value ];
-}
-
-function array_assign ( $arr, $defaults ) {
+function array_assign ( $destination, ...$origins ) {
 	$result = [];
-	foreach ( $defaults as $key => $value ) {
+	$merged = call_user_func_array( 'array_merge', $origins );
+	foreach ( $merged as $key => $value ) {
 		$result[ $key ] = array_get( $arr, $key, $value );
 	}
 	return $result;
