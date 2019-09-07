@@ -42,6 +42,9 @@ class Config {
 		if ( ! isset( $plugin_config['PREFIX'] ) ) {
 			$plugin_config['PREFIX'] = h\str_slug( $plugin_name, '_' ) . '_';
 		}
+		
+		// set root namespace
+		$plugin_config['ROOT_NAMESPACE'] = \preg_replace( '/\\\Core$/', '', __NAMESPACE__ );
 
 		foreach ( $plugin_config as $key => $value ) {
 			$options->set( $key, $value );
