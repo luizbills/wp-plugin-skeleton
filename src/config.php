@@ -10,7 +10,7 @@ return [
 	'DISABLE_CACHE' => WP_DEBUG,
 ];
 
-// important: don't use reserved keys (they're used internally)
+// important: don't use reserved keys (they're used internally).
 // reserved keys = NAME, VERSION, MAIN_FILE, ROOT_DIR, ROOT_NAMESPACE
 //
-// also important: SLUG and PREFIX is auto generated if you do not set them here
+// also important: SLUG and PREFIX is auto generated (based in plugin name), if you do not set them here.
