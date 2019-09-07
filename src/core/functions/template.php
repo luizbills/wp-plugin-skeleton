@@ -78,6 +78,12 @@ function register_default_template_filters () {
 	register_template_filter( 'uppercase', function ( $value ) {
 		return h\str_upper( $value );
 	} );
+	
+	// for debug
+	register_template_filter( 'log', function ( $value ) {
+		log( 'template variable =', $value );
+		return $value;
+	} );
 
 	config_set( 'template_filters_registered', true );
 }
