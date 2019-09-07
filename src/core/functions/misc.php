@@ -2,16 +2,9 @@
 
 namespace src_namespace__\functions;
 
-function value ( $value, $default = '' ) {
+function value ( $value, $default = null ) {
 	$result = is_callable( $value ) ? call_user_func( $value ) : $value;
-	return empty( $result ) ? $default : $result;
-}
-
-// returns a value of request body
-// e.g.: request_value( 'foo' ) returns $_GET['foo'] in GET requests
-function request_value ( $key, $default = '' ) {
-	$method = $_SERVER['REQUEST_METHOD'];
-	return array_get( $GLOBALS["_$method"], $key, $default );
+	return isset( $result ) ? $default : $result;
 }
 
 function maybe_define ( $key, $value = true, $force_upper_case = true ) {
