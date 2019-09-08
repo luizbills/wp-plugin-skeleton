@@ -10,11 +10,11 @@ final class Plugin_Dependencies {
 
 	protected $errors = null;
 
-	public function __construct () {
-		$this->add_action( h\prefix( 'pre_boot' ), 'check_dependencies' );
+	public function pre_boot () {
+		$this->check_dependencies();
 	}
 
-	public function check_dependencies () {
+	protected function check_dependencies () {
 		$deps = $this->get_dependencies();
 
 		$this->errors = [];
