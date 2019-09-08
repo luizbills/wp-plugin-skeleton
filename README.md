@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- [PHP](http://php.net/) v7.0+
+- [PHP](http://php.net/) v7.1+
 - [Git](https://git-scm.com/)
 - [Composer](https://getcomposer.org/) (globally installed as `composer`)
 
