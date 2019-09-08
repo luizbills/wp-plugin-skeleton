@@ -28,9 +28,7 @@ final class Plugin {
 		$this->includes();
 		$this->add_hooks();
 
-		if ( function_exists( 'v' ) ) {
-			h\register_custom_v_filters();
-		}
+		h\register_custom_v_filters();
 	}
 
 	protected function includes () {
