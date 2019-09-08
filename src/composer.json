@@ -1,8 +1,8 @@
 {
 	"require": {
-		"php": ">=7.0.0",
+		"php": ">=7.1.0",
 		"filp/whoops": "^2.3",
-		"luizbills/v": "^0.1"
+		"luizbills/v": "^0.2"
 	},
 	"autoload": {
 		"psr-4": {
