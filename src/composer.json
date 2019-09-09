@@ -1,8 +1,11 @@
 {
 	"require": {
-		"php": ">=7.1.0",
-		"filp/whoops": "^2.3",
-		"luizbills/v": "^0.2"
+		"php": "^7.1",
+		"luizbills/v": "^0.3"
+	},
+	"require-dev": {
+		"filp/whoops": "^2.5",
+		"symfony/var-dumper": "^4.3"
 	},
 	"autoload": {
 		"psr-4": {
