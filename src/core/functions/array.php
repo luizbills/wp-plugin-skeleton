@@ -7,11 +7,10 @@ function wrap ( $value ) {
 }
 
 function array_get ( $arr, $key, $default = null ) {
-	$value = $default;
 	if ( isset( $arr[ $key ] ) ) {
-		$value = $arr[ $key ];
+		return $arr[ $key ];
 	}
-	return $value;
+	return $default;
 }
 
 function array_head ( $arr ) {
@@ -63,4 +62,10 @@ function array_assign ( $destination, ...$origins ) {
 		$result[ $key ] = array_get( $arr, $key, $value );
 	}
 	return $result;
+}
+
+function array_ensure_keys ( &$arr, $keys, $value = '' ) {
+	foreach ( $keys as $key ) {
+		$arr[ $key ] = array_get( $arr, $key, $value );
+	}
 }
