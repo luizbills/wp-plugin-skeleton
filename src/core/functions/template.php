@@ -6,9 +6,8 @@ function include_php_template ( $template_path, $data = [] ) {
 	$template_base_path = config_get( 'ROOT_DIR' ) . '/' . config_get( 'TEMPLATES_DIR' );
 	$template_path = "$template_base_path/$template_path";
 	$var = \apply_filters( prefix( 'template_default_data' ), $data );
-	$v_context = config_get( 'SLUG' );
 
-	v_set_context( $v_context );
+	v_set_context( get_v_context() );
 	require $template_path;
 	v_reset_context();
 }
@@ -22,7 +21,7 @@ function get_php_template ( $template_path, $data = [] ) {
 function register_custom_v_filters () {
 	if ( config_get( 'custom_v_filters_registered', false ) ) return;
 
-	$context = config_get( 'SLUG' );
+	$context = get_v_context();
 
 	\v_register_filter(
 		'with_prefix',
@@ -35,7 +34,7 @@ function register_custom_v_filters () {
 	\v_register_filter(
 		'with_slug',
 		function ( $value, $args ) {
-			return config_get( 'SLUG' ) . '-' . $value;
+			return config_get( 'SLUG' ) . "-$value";
 		},
 		$context
 	);
@@ -43,4 +42,8 @@ function register_custom_v_filters () {
 	\do_action( prefix( 'register_v_filters' ) );
 
 	config_set( 'custom_v_filters_registered', true );
+}
+
+function get_v_context () {
+	return \apply_filters( prefix( 'v_context' ), config_get( 'SLUG' ) );
 }
