@@ -5,14 +5,14 @@ namespace src_namespace__\Common;
 abstract class Abstract_Ajax_Action {
 	use Hooker_Trait;
 
-	abstract public function get_action_name ();
-
 	public function init () {
 		$this->add_action( 'wp_ajax_' . $this->get_action_name(), 'handle_request' );
 		if ( $this->is_public() ) {
 			$this->add_action( 'wp_ajax_nopriv_' . $this->get_action_name(), 'handle_request' );
 		}
 	}
+
+	abstract public function get_action_name ();
 
 	public function is_public () {
 		return false;
@@ -39,10 +39,10 @@ abstract class Abstract_Ajax_Action {
 	}
 
 	public function handle_request () {
+		$this->validate_request();
 		$method = $_SERVER['REQUEST_METHOD'];
 		$callback = \strtolower( "handle_$method" );
 		if ( \method_exists( $this,  $callback ) ) {
-			$this->validate_nonce();
 			$this->$callback();
 		} else {
 			$this->send_default_response();
@@ -57,12 +57,13 @@ abstract class Abstract_Ajax_Action {
 		return '_ajax_nonce';
 	}
 
-	protected function validate_nonce () {
+	protected function validate_request () {
+		// validate with wp nonce
 		$nonce_action = $this->get_nonce_action();
 		$query_arg = $this->get_nonce_query_arg();
 		if ( ! \check_ajax_referer( $nonce_action, $query_arg, false ) ) {
 			$this->send_json_error(
-				__( 'Invalid nonce.', '{{plugin_text_domain}}' ),
+				__( 'Forbidden Access.', 'reunidas-user-updater' ),
 				403
 			);
 		}
@@ -70,7 +71,7 @@ abstract class Abstract_Ajax_Action {
 
 	protected function send_default_response () {
 		$this->send_json_error(
-			__( 'Invalid request method.', '{{plugin_text_domain}}' ),
+			__( 'Invalid request method.', 'reunidas-user-updater' ),
 			405
 		);
 	}
