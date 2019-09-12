@@ -40,7 +40,7 @@ class Config {
 
 		// set prefix
 		if ( ! isset( $plugin_config['PREFIX'] ) ) {
-			$plugin_config['PREFIX'] = h\str_slug( $plugin_name, '_' ) . '_';
+			$plugin_config['PREFIX'] = h\str_slug( $plugin_config['SLUG'], '_' ) . '_';
 		}
 
 		// set root namespace
