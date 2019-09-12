@@ -35,16 +35,17 @@ class Asset_Manager {
 			$url = h\get_asset_url( $src );
 		}
 
-		$args = h\array_assign(
-			$args,
-			\array_merge(
-				$this->get_defaults( $type ),
-				[ 'src' => $url ]
-			)
+		$args = \array_merge(
+			$this->get_defaults( $type ),
+			[
+				'src' => $url,
+				'handle' => h\str_slug( h\prefix( $src ), '_' ),
+			],
+			$args
 		);
 
-		if ( empty( $args['handle'] ) ) {
-			$args['handle'] = h\str_slug( h\prefix( $src ), '_' );
+		if ( null === h\array_get( $args, 'script_data_key' ) ) {
+			$args['script_data_key'] = $args['handle'];
 		}
 
 		$scripts[ $src ] = \apply_filters( h\prefix( 'asset_args' ), $args, $src );
@@ -63,7 +64,8 @@ class Asset_Manager {
 			$scripts = $this->store->get( $type, [] );
 
 			foreach ( $scripts as $key => $args ) {
-				extract( $args );
+				$allowed_args = \array_keys( $this->get_defaults( $type ) );
+				\extract( h\array_only( $args, $allowed_args ) );
 
 				if ( ! call_user_func( $condition ) ) continue;
 
@@ -84,15 +86,15 @@ class Asset_Manager {
 					)
 				);
 
-				if ( ! empty( $script_data ) ) {
-					$this->script_data[ $key ] = $script_data;
+				if ( 'js' == $type && ! is_null( $script_data_key ) ) {
+					$this->script_data[ $script_data_key ] = $script_data;
 				}
 			}
 		}
 	}
 
 	public function print_script_data () {
-		if ( ! empty( $this->script_data ) ) {
+		if ( ! is_null( $this->script_data ) ) {
 			$data = $this->script_data;
 
 			$data['ajax_url'] = \admin_url( 'admin-ajax.php' );
@@ -106,7 +108,10 @@ class Asset_Manager {
 	}
 
 	protected function get_types () {
-		return [ 'css', 'js' ];
+		return [
+			'css',
+			'js'
+		];
 	}
 
 	protected function is_valid_extension ( $extension ) {
@@ -116,8 +121,8 @@ class Asset_Manager {
 
 	protected function get_defaults ( $type ) {
 		$defaults = [
-			'src' => '',
-			'handle' => '',
+			'src' => null,
+			'handle' => null,
 			'version' => h\config_get( 'VERSION', false ),
 			'deps' => false,
 			'condition' => '__return_true',
@@ -127,6 +132,7 @@ class Asset_Manager {
 		if ( 'js' == $type ) {
 			$defaults['in_footer'] = true;
 			$defaults['script_data'] = null;
+			$defaults['script_data_key'] = null;
 		}
 		elseif ( 'css' == $type ) {
 			$defaults['media'] = 'all';
