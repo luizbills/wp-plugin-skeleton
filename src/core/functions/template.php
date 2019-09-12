@@ -3,12 +3,18 @@
 namespace src_namespace__\functions;
 
 function include_php_template ( $template_path, $data = [] ) {
-	$template_base_path = config_get( 'ROOT_DIR' ) . '/' . config_get( 'TEMPLATES_DIR' );
-	$template_path = "$template_base_path/$template_path";
-	$var = \apply_filters( prefix( 'template_default_data' ), $data );
+	// complete the path
+	$base_path = config_get( 'ROOT_DIR' ) . '/' . config_get( 'TEMPLATES_DIR' );
+	$path = "$base_path/$template_path";
+	// ensure php extension
+	$path .= str_ends_with( $path, '.php' ) ? '' : '.php';
 
+	// get template variables
+	$var = \apply_filters( prefix( 'template_data' ), $data, $template_path );
+
+	// render
 	v_set_context( get_v_context() );
-	require $template_path;
+	require $path;
 	v_reset_context();
 }
 
