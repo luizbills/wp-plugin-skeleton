@@ -55,7 +55,8 @@ function array_group_by_prefix ( $arr, $prefix ) {
 	return $group;
 }
 
-// function array_assign deleted, use \array_merge
+// array_assign function was deleted, use \array_merge
+// and ensure only allowed keys with array_only function
 
 function array_ensure_keys ( &$arr, $keys, $value = '' ) {
 	foreach ( $keys as $key ) {
