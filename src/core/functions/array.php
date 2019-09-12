@@ -55,14 +55,7 @@ function array_group_by_prefix ( $arr, $prefix ) {
 	return $group;
 }
 
-function array_assign ( $destination, ...$origins ) {
-	$result = [];
-	$merged = call_user_func_array( 'array_merge', $origins );
-	foreach ( $merged as $key => $value ) {
-		$result[ $key ] = array_get( $destination, $key, $value );
-	}
-	return $result;
-}
+// function array_assign deleted, use \array_merge
 
 function array_ensure_keys ( &$arr, $keys, $value = '' ) {
 	foreach ( $keys as $key ) {
