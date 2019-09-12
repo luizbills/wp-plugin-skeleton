@@ -59,7 +59,7 @@ function array_assign ( $destination, ...$origins ) {
 	$result = [];
 	$merged = call_user_func_array( 'array_merge', $origins );
 	foreach ( $merged as $key => $value ) {
-		$result[ $key ] = array_get( $arr, $key, $value );
+		$result[ $key ] = array_get( $destination, $key, $value );
 	}
 	return $result;
 }
