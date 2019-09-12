@@ -3,11 +3,12 @@
 namespace src_namespace__\functions;
 
 function include_php_template ( $template_path, $data = [] ) {
+	// ensure php extension
+	$template_path .= ! str_ends_with( $path, '.php' ) ? '.php' : '';
+
 	// complete the path
 	$base_path = config_get( 'ROOT_DIR' ) . '/' . config_get( 'TEMPLATES_DIR' );
 	$path = "$base_path/$template_path";
-	// ensure php extension
-	$path .= str_ends_with( $path, '.php' ) ? '' : '.php';
 
 	// get template variables
 	$var = \apply_filters( prefix( 'template_data' ), $data, $template_path );
