@@ -4,7 +4,7 @@ namespace src_namespace__\functions;
 
 function include_php_template ( $template_path, $data = [] ) {
 	// ensure php extension
-	$template_path .= ! str_ends_with( $path, '.php' ) ? '.php' : '';
+	$template_path .= ! str_ends_with( $template_path, '.php' ) ? '.php' : '';
 
 	// complete the path
 	$base_path = config_get( 'ROOT_DIR' ) . '/' . config_get( 'TEMPLATES_DIR' );
