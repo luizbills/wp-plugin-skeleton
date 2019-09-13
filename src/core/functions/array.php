@@ -7,10 +7,7 @@ function wrap ( $value ) {
 }
 
 function array_get ( $arr, $key, $default = null ) {
-	if ( isset( $arr[ $key ] ) ) {
-		return $arr[ $key ];
-	}
-	return $default;
+	return isset( $arr[ $key ] ) ? $arr[ $key ] : $default;
 }
 
 function array_head ( $arr ) {
@@ -48,7 +45,7 @@ function array_group_by_prefix ( $arr, $prefix ) {
 	$group = [];
 	foreach ( $arr as $key => $value ) {
 		if ( str_starts_with( $key, $prefix ) ) {
-			$new_key = substr( $key, strlen( $prefix ) );
+			$new_key = \substr( $key, strlen( $prefix ) );
 			$group[ $new_key ] = $value;
 		}
 	}
