@@ -12,7 +12,7 @@ foreach ( h\rscandir( $dir ) as $file ) {
 }
 
 // load functions.php
-$custom_functions = __DIR__ . '../functions.php';
+$custom_functions = __DIR__ . '/../functions.php';
 
 if ( file_exists( $custom_functions ) ) {
 	include_once $custom_functions;
