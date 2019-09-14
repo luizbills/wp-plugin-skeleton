@@ -47,6 +47,10 @@ class Config {
 		$plugin_config['NAMESPACE_BASE'] = \preg_replace( '/\\\Core$/', '', __NAMESPACE__ );
 
 		foreach ( $plugin_config as $key => $value ) {
+			h\throw_if(
+				h\str_starts_with( $key, '_' ),
+				'config.php can not declare keys starting with underline'
+			);
 			$options->set( $key, $value );
 		}
 	}
