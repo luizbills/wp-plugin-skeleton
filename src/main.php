@@ -22,8 +22,8 @@ use src_namespace__\functions as h;
 
 $use_whoops = h\all_equal(
 	[
-		class_exists( 'Whoops\\Run' ),
-		! h\get_defined( 'DOING_AJAX' ),
+		\class_exists( 'Whoops\\Run' ),
+		! \wp_doing_ajax(),
 		h\get_defined( 'WP_DEBUG' ),
 		h\get_defined( 'WP_DEBUG_DISPLAY' )
 	],
