@@ -26,7 +26,10 @@ function get_php_template ( $template_path, $data = [] ) {
 }
 
 function register_custom_v_filters () {
-	if ( config_get( 'custom_v_filters_registered', false ) ) return;
+	if ( config_get( 'custom_v_filters_registered', false ) ) {
+		return;
+	}
+	config_set( 'custom_v_filters_registered', true );
 
 	$context = get_v_context();
 
@@ -45,10 +48,19 @@ function register_custom_v_filters () {
 		},
 		$context
 	);
-
-	\do_action( prefix( 'register_v_filters' ) );
-
-	config_set( 'custom_v_filters_registered', true );
+	
+	\v_register_filter(
+		'escape',
+		function ( $value, $args ) {
+			$type = (string) $args->get( 0 );
+			$function = '' != $type ? "esc_$type" : false;
+			if ( $function && \function_exists( $function ) ) {
+				return $function( $value );
+			}
+			return \esc_html( $value );
+		},
+		$context
+	);
 }
 
 function get_v_context () {
