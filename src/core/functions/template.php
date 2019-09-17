@@ -53,8 +53,9 @@ function register_custom_v_filters () {
 		'escape',
 		function ( $value, $args ) {
 			$type = (string) $args->get( 0 );
-			$function = '' != $type ? "esc_$type" : false;
-			if ( $function && \function_exists( $function ) ) {
+			$function = $type ? "esc_$type" : false;
+			if ( $function ) {
+				throw_if( ! \function_exists( $function ), 'unexpected argument 1 for v filter espape: ' . $type );
 				return $function( $value );
 			}
 			return \esc_html( $value );
