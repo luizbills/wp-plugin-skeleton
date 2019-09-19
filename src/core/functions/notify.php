@@ -8,10 +8,9 @@ function notify ( $message, $options = [] ) {
 	if ( \apply_filters( prefix( 'notify_email_enabled' ), true ) ) {
 		$recipients = [ \get_bloginfo( 'admin_email' ) ];
 		$subject = config_get( 'NAME' ) . ' Notification';
-		$headers = [];
-		$email_content_type = array_get( $options, 'email_content_type', 'content-type: text/html; charset=utf-8' );
-
-		$headers[] = $email_content_type;
+		$headers = [
+			array_get( $options, 'email_content_type', 'content-type: text/html; charset=utf-8' )
+		];
 
 		\wp_mail(
 			\apply_filters( prefix( 'notify_email_recipients' ), $recipients, $options ),
