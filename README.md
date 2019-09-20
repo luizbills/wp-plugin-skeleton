@@ -25,7 +25,7 @@ git clone https://github.com/luizbills/wp-plugin-skeleton.git _skeleton \
 - Simple installation (see above)
 - Several [helper functions](src/core/functions)
 - Easy [static file management](src/core/classes/Utils/Asset_Manager.php)
-- Powerful [template helpers](src/core/functions/template.php)
+- [Template helpers](src/core/functions/template.php) and [V](https://github.com/luizbills/v) integration.
 
 ## Contributing
 
