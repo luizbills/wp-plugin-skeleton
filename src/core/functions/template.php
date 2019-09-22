@@ -6,17 +6,30 @@ function include_php_template ( $template_path, $data = [] ) {
 	// ensure php extension
 	$template_path .= ! str_ends_with( $template_path, '.php' ) ? '.php' : '';
 
-	// complete the path
-	$base_path = config_get( 'ROOT_DIR' ) . '/' . config_get( 'TEMPLATES_DIR' );
-	$path = "$base_path/$template_path";
+	// get all templates locations
+	$paths = \apply_filters( prefix( 'php_template_paths' ), [] );
 
-	// get template variables
-	$var = \apply_filters( prefix( 'template_data' ), $data, $template_path );
+	// add the default templates location
+	$paths[] = config_get( 'ROOT_DIR' ) . '/' . config_get( 'TEMPLATES_DIR' );
 
-	// render
-	v_set_context( get_v_context() );
-	require $path;
-	v_reset_context();
+	// search for an existing template
+	foreach ( $paths as $base_path ) {
+		if ( \file_exists( "$base_path/$template_path" ) ) {
+			// get template variables
+			$var = \apply_filters( prefix( 'php_template_data' ), $data, $template_path );
+
+			// render
+			v_set_context( get_v_context() );
+			include "$base_path/$template_path";
+			v_reset_context();
+
+			// render one template only
+			break;
+		}
+	}
+
+	// throws an error if none template are found
+	throw_if( true, "Template file do not exists: $template_path" );
 }
 
 function get_php_template ( $template_path, $data = [] ) {
@@ -49,6 +62,7 @@ function register_custom_v_filters () {
 		$context
 	);
 	
+	// overwrites the escape filter
 	\v_register_filter(
 		'escape',
 		function ( $value, $args ) {
