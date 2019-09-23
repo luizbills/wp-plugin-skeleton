@@ -102,8 +102,8 @@ class Asset_Manager {
 		];
 
 		\printf(
-			"<script>window.%s = %s</script>",
-			h\prefix( 'script_data' ),
+			"<script>window['%s'] = %s</script>",
+			\esc_js( h\prefix( 'script_data' ) ),
 			\wp_json_encode( array_merge( [], $this->script_data, $data ) )
 		);
 	}
