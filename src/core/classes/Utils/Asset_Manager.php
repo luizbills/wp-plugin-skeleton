@@ -94,17 +94,18 @@ class Asset_Manager {
 	}
 
 	public function print_script_data () {
-		if ( ! is_null( $this->script_data ) ) {
-			$data = $this->script_data;
+		$data = [
+			'$ajax_url' => \admin_url( 'admin-ajax.php' ),
+			'$prefix' => h\config_get( 'PREFIX' ),
+			'$slug' => h\config_get( 'SLUG' ),
+			'$debug' => h\get_defined( 'WP_DEBUG' ),
+		];
 
-			$data['ajax_url'] = \admin_url( 'admin-ajax.php' );
-
-			\printf(
-				"<script>window.%s = %s</script>",
-				h\prefix( 'script_data' ),
-				\wp_json_encode( $data )
-			);
-		}
+		\printf(
+			"<script>window.%s = %s</script>",
+			h\prefix( 'script_data' ),
+			\wp_json_encode( array_merge( [], $this->script_data, $data ) )
+		);
 	}
 
 	protected function get_types () {
