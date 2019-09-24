@@ -54,6 +54,7 @@ class Asset_Manager {
 
 	public function enqueue_assets () {
 		$types = $this->get_types();
+		$is_admin = \is_admin();
 
 		$function = [
 			'css' => 'wp_enqueue_style',
@@ -68,6 +69,7 @@ class Asset_Manager {
 				\extract( h\array_only( $args, $allowed_args ) );
 
 				if ( ! call_user_func( $condition ) ) continue;
+				if ( $is_admin !== $in_admin ) continue;
 
 				$function[ $type ](
 					$handle,
@@ -128,6 +130,7 @@ class Asset_Manager {
 			'deps' => false,
 			'condition' => '__return_true',
 			'type' => $type,
+			'in_admin' => false,
 		];
 
 		if ( 'js' == $type ) {
