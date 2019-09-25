@@ -18,5 +18,12 @@ function return_push_value ( $value ) {
 function return_print_value ( $value ) {
 	return function () use ( $value ) {
 		echo $value;
+		return $value;
+	};
+}
+
+function return_call_function ( $function, ...$args ) {
+	return function () use ( $function, $args ) {
+		return call_user_func_array( $function, $args );
 	};
 }
