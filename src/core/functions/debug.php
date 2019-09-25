@@ -3,8 +3,10 @@
 namespace src_namespace__\functions;
 
 function throw_if ( $condition, $message, $code = 0 ) {
-	$is_enabled = \apply_filters( 'debug_throw_if_enabled', true, $message, $code );
-	if ( $is_enabled && $condition ) {
+	if ( $condition ) {
+		if ( \is_callable( $message ) ) {
+			$message = $message();
+		}
 		throw new \ErrorException( $message, $code = 0 );
 	}
 	return $condition;
