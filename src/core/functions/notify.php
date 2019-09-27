@@ -7,7 +7,7 @@ function notify ( $message, $options = [] ) {
 
 	if ( \apply_filters( prefix( 'notify_email_enabled' ), true ) ) {
 		$recipients = [ \get_bloginfo( 'admin_email' ) ];
-		$subject = config_get( 'NAME' ) . ' Notification';
+		$subject = array_get( $options, 'email_subject', config_get( 'NAME' ) . ' Notification' );
 		$headers = [
 			array_get( $options, 'email_content_type', 'content-type: text/html; charset=utf-8' )
 		];
