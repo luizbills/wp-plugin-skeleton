@@ -12,6 +12,25 @@ function throw_if ( $condition, $message, $code = 0 ) {
 	return $condition;
 }
 
+function handle_exception ( \Throwable $exception, callbale $callback ) {
+	$message = $exception->getMessage();
+	$slug = config_get( 'SLUG' );
+	if ( str_starts_with( $message, "[$slug-" ) ) {
+		$parts = \explode( ']', $message );
+		if ( count( $parts ) < 2 ) {
+			return false;
+		}
+		// get error id
+		$error_id = \array_shift( $parts );
+		$error_id = preg_replace( "/^\[$slug-/", '', $error_id );
+		// get message
+		$error_message = \implode( ']', $parts );
+		// handle
+		return $callback( trim( $error_message ), trim( $error_id ) );
+	}
+	return false;
+}
+
 function log ( ...$args ) {
 	$is_enabled = \apply_filters( prefix( 'debug_log_enabled' ), get_defined( 'WP_DEBUG_LOG', false ) );
 	if ( ! $is_enabled ) return;
