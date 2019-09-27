@@ -7,7 +7,6 @@ use src_namespace__\Utils\Data_Store;
 use src_namespace__\functions as h;
 
 class Asset_Manager {
-
 	use Hooker_Trait;
 
 	protected $store;
@@ -38,15 +37,12 @@ class Asset_Manager {
 		$args = \array_merge(
 			$this->get_defaults( $type ),
 			[
+				'path' => $src,
 				'src' => $url,
 				'handle' => h\str_slug( h\prefix( $src ), '_' ),
 			],
 			$args
 		);
-
-		if ( null === h\array_get( $args, 'script_data_key' ) ) {
-			$args['script_data_key'] = $args['handle'];
-		}
 
 		$scripts[ $src ] = \apply_filters( h\prefix( 'asset_args' ), $args, $src );
 		$this->store->set( $type, $scripts );
@@ -57,8 +53,8 @@ class Asset_Manager {
 		$is_admin = \is_admin();
 
 		$function = [
-			'css' => 'wp_enqueue_style',
 			'js' => 'wp_enqueue_script',
+			'css' => 'wp_enqueue_style',
 		];
 
 		foreach ( $types as $type ) {
@@ -68,8 +64,8 @@ class Asset_Manager {
 				$allowed_args = \array_keys( $this->get_defaults( $type ) );
 				\extract( h\array_only( $args, $allowed_args ) );
 
-				if ( ! call_user_func( $condition ) ) continue;
 				if ( $is_admin !== $in_admin ) continue;
+				if ( ! call_user_func( $condition ) ) continue;
 
 				$function[ $type ](
 					$handle,
@@ -81,15 +77,15 @@ class Asset_Manager {
 
 				h\log(
 					sprintf(
-						'Enqueued %s: handle=%s src=%s',
+						'Enqueued %s: path=%s',
 						\strtoupper( $type ),
-						$handle,
-						$src
+						$path
 					)
 				);
 
-				if ( 'js' == $type && ! is_null( $script_data_key ) ) {
-					$this->script_data[ $script_data_key ] = $script_data;
+				if ( 'js' == $type && ! is_null( $script_data ) ) {
+					$key = ! is_null( $script_data_key ) ? $script_data_key : $path;
+					$this->script_data[ $key ] = $script_data;
 				}
 			}
 		}
@@ -104,7 +100,7 @@ class Asset_Manager {
 		];
 
 		\printf(
-			"<script>window['%s'] = %s</script>",
+			"<script>window['%s'] = JSON.parse('%s');</script>",
 			\esc_js( h\prefix( 'script_data' ) ),
 			\wp_json_encode( array_merge( [], $this->script_data, $data ) )
 		);
@@ -112,8 +108,8 @@ class Asset_Manager {
 
 	protected function get_types () {
 		return [
+			'js',
 			'css',
-			'js'
 		];
 	}
 
@@ -125,8 +121,9 @@ class Asset_Manager {
 	protected function get_defaults ( $type ) {
 		$defaults = [
 			'src' => null,
+			'path' => null,
 			'handle' => null,
-			'version' => h\config_get( 'VERSION', false ),
+			'version' => h\config_get( 'VERSION' ),
 			'deps' => false,
 			'condition' => '__return_true',
 			'type' => $type,
