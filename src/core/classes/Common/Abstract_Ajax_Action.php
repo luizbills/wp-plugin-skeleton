@@ -26,18 +26,6 @@ abstract class Abstract_Ajax_Action {
 		$this->send_default_response();
 	}
 
-	public function handle_put () {
-		$this->send_default_response();
-	}
-
-	public function handle_delete () {
-		$this->send_default_response();
-	}
-
-	public function handle_patch () {
-		$this->send_default_response();
-	}
-
 	public function handle_request () {
 		$this->validate_request();
 		$method = $_SERVER['REQUEST_METHOD'];
