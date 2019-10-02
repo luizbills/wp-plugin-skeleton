@@ -59,4 +59,5 @@ function array_ensure_keys ( &$arr, $keys, $value = '' ) {
 	foreach ( $keys as $key ) {
 		$arr[ $key ] = array_get( $arr, $key, $value );
 	}
+	return $arr;
 }
