@@ -12,7 +12,7 @@ function throw_if ( $condition, $message, $code = 0 ) {
 	return $condition;
 }
 
-function handle_exception ( \Throwable $exception, callbale $callback ) {
+function handle_exception ( \Throwable $exception, Callable $callback ) {
 	$message = $exception->getMessage();
 	$slug = config_get( 'SLUG' );
 	if ( str_starts_with( $message, "[$slug-" ) ) {
