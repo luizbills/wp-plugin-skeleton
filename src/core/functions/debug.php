@@ -2,12 +2,14 @@
 
 namespace src_namespace__\functions;
 
-function throw_if ( $condition, $message, $code = 0 ) {
+function throw_if ( $condition, $message, $error_id = '' ) {
 	if ( $condition ) {
 		if ( \is_callable( $message ) ) {
 			$message = $message();
 		}
-		throw new \ErrorException( $message, $code = 0 );
+		$slug = config_get( 'SLUG' );
+		$error_slug = $error_id ? "[$slug-error-$error_id]" : "[$slug-error]";
+		throw new \ErrorException( "$error_slug $message" );
 	}
 	return $condition;
 }
