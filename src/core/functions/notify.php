@@ -6,12 +6,18 @@ function notify ( $message, $options = [] ) {
 	$options['message'] = $message;
 
 	if ( \apply_filters( prefix( 'notify_email_enabled' ), true ) ) {
-		$recipients = [ \get_bloginfo( 'admin_email' ) ];
+		$recipients = [];
 		$subject = array_get( $options, 'email_subject', config_get( 'NAME' ) . ' Notification' );
 		$headers = [
 			array_get( $options, 'email_content_type', 'content-type: text/html; charset=utf-8' )
 		];
-
+		
+		// notify site admin by default
+		if ( array_get( $options, 'email_to_admin', true ) ) {
+			$recipients[] = \get_bloginfo( 'admin_email' );
+		}
+		
+		// send email
 		\wp_mail(
 			\apply_filters( prefix( 'notify_email_recipients' ), $recipients, $options ),
 			\apply_filters( prefix( 'notify_email_subject' ), $subject, $options ),
@@ -21,5 +27,5 @@ function notify ( $message, $options = [] ) {
 	}
 
 	\do_action( prefix( 'notify' ), $options );
-	log( "Notification sent: ${options['message']}" );
+	log( "Notification sent: {$options['message']}" );
 }
