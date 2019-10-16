@@ -24,7 +24,7 @@ function include_php_template ( $template_path, $data = [] ) {
 			v_reset_context();
 
 			// render one template only
-			break;
+			return;
 		}
 	}
 
