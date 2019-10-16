@@ -3,6 +3,8 @@
 namespace src_namespace__\functions;
 
 function include_php_template ( $template_path, $data = [] ) {
+	$found = false;
+
 	// ensure php extension
 	$template_path .= ! str_ends_with( $template_path, '.php' ) ? '.php' : '';
 
@@ -14,7 +16,8 @@ function include_php_template ( $template_path, $data = [] ) {
 
 	// search for an existing template
 	foreach ( $paths as $base_path ) {
-		if ( \file_exists( "$base_path/$template_path" ) ) {
+		$found = \file_exists( "$base_path/$template_path" );
+		if ( $found ) {
 			// get template variables
 			$var = \apply_filters( prefix( 'php_template_data' ), $data, $template_path );
 
@@ -24,12 +27,12 @@ function include_php_template ( $template_path, $data = [] ) {
 			v_reset_context();
 
 			// render one template only
-			return;
+			break;
 		}
 	}
 
 	// throws an error if none template are found
-	throw_if( true, "Template file do not exists: $template_path" );
+	throw_if( ! $found, "Template file do not exists: $template_path" );
 }
 
 function get_php_template ( $template_path, $data = [] ) {
