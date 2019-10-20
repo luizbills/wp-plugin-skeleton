@@ -17,12 +17,12 @@ $boot_classes = [
 	// classes with `boot` method
 	// boot() method is called in 'init' hook
 	//Some_Namespace\Foo::class,
+	Plugin_Dependencies::class
 ];
 
 $pre_boot_classes = [
 	// classes with `pre_boot` method
 	//Some_Namespace\Foo::class,
-	Plugin_Dependencies::class
 ];
 
 $activation_classes = [
