@@ -84,8 +84,7 @@ class Asset_Manager {
 				);
 
 				if ( 'js' == $type && ! is_null( $script_data ) ) {
-					$key = ! is_null( $script_data_key ) ? $script_data_key : $path;
-					$this->script_data[ $key ] = $script_data;
+					$this->script_data = \array_merge( $this->script_data, $script_data );
 				}
 			}
 		}
@@ -123,7 +122,7 @@ class Asset_Manager {
 			'src' => null,
 			'path' => null,
 			'handle' => null,
-			'version' => h\config_get( 'VERSION' ),
+			'version' => h\config_get( 'VERSION' ) . ( WP_DEBUG ? '.' . \time() : '' ),
 			'deps' => false,
 			'condition' => '__return_true',
 			'type' => $type,
@@ -133,7 +132,6 @@ class Asset_Manager {
 		if ( 'js' == $type ) {
 			$defaults['in_footer'] = true;
 			$defaults['script_data'] = null;
-			$defaults['script_data_key'] = null;
 		}
 		elseif ( 'css' == $type ) {
 			$defaults['media'] = 'all';
