@@ -10,7 +10,7 @@ final class Plugin_Dependencies {
 
 	protected $errors = null;
 
-	public function pre_boot () {
+	public function boot () {
 		$this->check_dependencies();
 	}
 
@@ -66,7 +66,7 @@ final class Plugin_Dependencies {
 	}
 
 	protected function disable_plugin () {
-		add_filter( h\prefix( 'should_boot' ), '__return_false', 999 );
+		add_filter( h\prefix( 'should_init' ), '__return_false', 999 );
 	}
 
 	protected function get_required_php_version () {
