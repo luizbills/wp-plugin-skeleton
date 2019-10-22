@@ -24,3 +24,23 @@ function get_load_class_methods () {
 function get_load_class_hook ( $method ) {
 	return prefix( "load_classes_on_$method" );
 }
+
+function load_classes ( $method ) {
+	$wp_hook = get_load_class_hook( $method );
+	$classes = \apply_filters( $wp_hook, [] );
+
+	foreach ( $classes as $class_name ) {
+		$instance = config_get_instance( $class_name, false );
+
+		if ( false === $instance ) {
+			$instance = config_set_instance( $class_name );
+		}
+
+		throw_if(
+			! \method_exists( $instance, $method ),
+			"The $class_name class don't has ${method}() method."
+		);
+
+		$instance->$method();
+	}
+}
