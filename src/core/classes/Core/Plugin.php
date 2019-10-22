@@ -10,25 +10,20 @@ final class Plugin {
 	use Hooker_Trait;
 
 	protected static $instance = null;
-
-	public static function get_instance ( $main_file = null ) {
-		if ( null === self::$instance ) {
-			self::$instance = new self( $main_file );
-		}
-		return self::$instance;
-	}
+	protected static $running = false;
 
 	public static function run ( $main_file ) {
-		return self::get_instance( $main_file );
+		if ( ! self::$running ) {
+			new self( $main_file );
+			self::$running = true;
+		}
 	}
 
 	protected function __construct ( $main_file ) {
 		Config::setup( $main_file );
-
 		$this->includes();
+		$this->pre_boot();
 		$this->add_hooks();
-
-		h\register_custom_v_filters();
 	}
 
 	protected function includes () {
@@ -36,51 +31,25 @@ final class Plugin {
 	}
 
 	protected function add_hooks () {
-		// try to boot
-		$this->pre_boot();
-		$should_boot = \apply_filters( h\prefix( 'should_boot' ), true );
-		if ( ! $should_boot ) return;
 		$this->add_action( 'plugins_loaded', 'boot' );
-
-		// try to init
-		\do_action( h\prefix( 'pre_init' ) );
-		$should_init = \apply_filters( h\prefix( 'should_init' ), true );
-		if ( ! $should_init ) return;
+		$this->add_action( 'init', 'load_plugin_textdomain', 0 );
 		$this->add_action( 'init', 'init' );
 	}
 
 	public function pre_boot () {
-		$this->load_classes( 'pre_boot' );
+		h\load_classes( 'pre_boot' );
 	}
 
 	public function boot () {
-		$this->load_classes( 'boot' );
+		h\load_classes( 'boot' );
 	}
 
 	public function init () {
-		$this->add_action( 'init', 'load_plugin_textdomain', 0 );
-		$this->load_classes( 'init' );
+		$should_init = \apply_filters( h\prefix( 'should_init' ), true );
+		if ( ! $should_init ) return;
+
+		h\load_classes( 'init' );
 		\do_action( h\prefix( 'after_init' ) );
-	}
-
-	public function load_classes ( $method ) {
-		$wp_hook = h\get_load_class_hook( $method );
-		$classes = \apply_filters( $wp_hook, [] );
-
-		foreach ( $classes as $class_name ) {
-			$instance = h\config_get_instance( $class_name, false );
-
-			if ( false === $instance ) {
-				$instance = h\config_set_instance( $class_name );
-			}
-
-			h\throw_if(
-				! \method_exists( $instance, $method ),
-				"The $class_name class don't has ${method}() method."
-			);
-
-			$instance->$method();
-		}
 	}
 
 	public function load_plugin_textdomain () {
