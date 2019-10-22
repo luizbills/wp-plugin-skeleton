@@ -41,6 +41,10 @@ function get_php_template ( $template_path, $data = [] ) {
 	return ob_get_clean();
 }
 
+function get_v_context () {
+	return \apply_filters( prefix( 'v_context' ), config_get( 'SLUG' ) );
+}
+
 function register_custom_v_filters () {
 	if ( config_get( 'custom_v_filters_registered', false ) ) {
 		return;
@@ -48,7 +52,8 @@ function register_custom_v_filters () {
 	config_set( 'custom_v_filters_registered', true );
 
 	$context = get_v_context();
-
+	
+	// prepend the plugin prefix
 	\v_register_filter(
 		'with_prefix',
 		function ( $value, $args ) {
@@ -57,6 +62,7 @@ function register_custom_v_filters () {
 		$context
 	);
 
+	// prepend the plugin slug
 	\v_register_filter(
 		'with_slug',
 		function ( $value, $args ) {
@@ -80,7 +86,4 @@ function register_custom_v_filters () {
 		$context
 	);
 }
-
-function get_v_context () {
-	return \apply_filters( prefix( 'v_context' ), config_get( 'SLUG' ) );
-}
+\add_action( 'plugins_loaded', __NAMESPACE__ . '\\register_custom_v_filters', 0 );
