@@ -16,11 +16,12 @@ abstract class Abstract_Shortcode {
 
 	public function callback ( $atts, $content = '', $tag = '' ) {
 		$atts = empty( $atts ) ? [] : $atts;
-		$atts = \array_merge( $atts, $this->get_default_attributes() );
-		if ( $this->validate_attributes( $atts ) ) {
+		$atts = \array_merge( $this->get_default_attributes(), $atts );
+		$validate = $this->validate_attributes( $atts );
+		if ( true === $validate ) {
 			return $this->get_output( $atts, $content );
 		}
-		return \apply_filters( h\prefix( "shortcode_${tag}_error_output" ), '', $atts, $content );
+		return h\user_is_admin() ? "<div class='shortcode-$tag-error'>$validate</div>" : '';
 	}
 
 	public function get_default_attributes () {
@@ -28,6 +29,8 @@ abstract class Abstract_Shortcode {
 	}
 
 	public function validate_attributes ( $atts ) {
+		// should returns true on success
+		// or an error string on failure 
 		return true;
 	}
 }
