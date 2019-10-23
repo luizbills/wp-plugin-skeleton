@@ -5,6 +5,9 @@ return [
 	'ASSETS_DIR' => 'assets',
 	'TEMPLATES_DIR' => 'templates',
 	'LANGUAGES_DIR' => 'languages',
+	
+	// optional
+	// 'SLUG' => 'your-custom-slug',
 
 	// disable the plugin cache while in development or debugging
 	'DISABLE_CACHE' => WP_DEBUG,
