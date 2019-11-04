@@ -15,11 +15,12 @@ final class Plugin_Dependencies {
 
 	public function set_dependencies ( $deps ) {
 		$deps['php'] = function () {
-			$php_version = $this->get_required_php_version();
+			$server_version = $this->sanitize_version( \PHP_VERSION );
+			$required_version = $this->get_required_php_version();
 
-			if ( $php_version && ! $this->compare_version( $php_version, PHP_VERSION ) ) {
+			if ( $required_version && ! $this->compare_version( $server_version, $required_version ) ) {
 				return esc_html__(
-					"Upgrade your PHP version to $required_php_version or later.",
+					"Upgrade your PHP version to $required_version or later.",
 					'{{plugin_text_domain}}'
 				);
 			}
@@ -30,7 +31,7 @@ final class Plugin_Dependencies {
 
 	public function print_errors ( $errors ) {
 		$name = h\config_get( 'NAME' );
-		$message = '<strong>' . __( "Missing requirements for $name. Please follow this instructions:" ) . '</strong>';
+		$message = '<strong>' . esc_html__( "Missing requirements for $name. Please follow this instructions:" ) . '</strong>';
 		foreach ( $errors as $error ) {
 			$message .= sprintf( '<br>%s%s', \str_repeat( '&nbsp;', 4 ), $error );
 		}
@@ -49,8 +50,7 @@ final class Plugin_Dependencies {
 			$json = h\safe_json_decode( $content, false );
 
 			if ( isset( $json->require->php ) ) {
-				$version = preg_replace( '/[^0-9.]/', '', $json->require->php );
-				return $version;
+				return $this->sanitize_version( $json->require->php );
 			}
 		}
 
@@ -62,7 +62,11 @@ final class Plugin_Dependencies {
 		return \is_plugin_active( $plugin_main_file );
 	}
 
+	protected function sanitize_version ( $version ) {
+		return  preg_replace( '/[^0-9\.]/', '', $version );
+	}
+
 	protected function compare_version ( $version1, $version2, $operator = '>=' ) {
-		return version_compare( strtolower( $version1 ), strtolower( $version2 ), $operator );
+		return \version_compare( $version1, $version2, $operator );
 	}
 }
