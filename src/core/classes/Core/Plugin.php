@@ -4,6 +4,7 @@ namespace src_namespace__\Core;
 
 use src_namespace__\functions as h;
 use src_namespace__\Core\Config;
+use src_namespace__\Core\Dependencies;
 use src_namespace__\Common\Hooker_Trait;
 
 final class Plugin {
@@ -45,11 +46,10 @@ final class Plugin {
 	}
 
 	public function init () {
-		$should_init = \apply_filters( h\prefix( 'should_init' ), true );
-		if ( ! $should_init ) return;
-
-		h\load_classes( 'init' );
-		\do_action( h\prefix( 'after_init' ) );
+		if ( Dependencies::validate() ) {
+			h\load_classes( 'init' );
+			\do_action( h\prefix( 'after_init' ) );
+		}
 	}
 
 	public function load_plugin_textdomain () {
