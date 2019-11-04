@@ -28,7 +28,7 @@ final class Plugin_Dependencies {
 		return $deps;
 	}
 
-	public function print_error_notice ( $errors ) {
+	public function print_errors ( $errors ) {
 		$name = h\config_get( 'NAME' );
 		$message = '<strong>' . __( "Missing requirements for $name. Please follow this instructions:" ) . '</strong>';
 		foreach ( $errors as $error ) {
