@@ -92,6 +92,7 @@ class Asset_Manager {
 	}
 
 	public function print_script_data () {
+		$plugin_name = h\config_get( 'NAME' );
 		$data = [
 			'$ajax_url' => \admin_url( 'admin-ajax.php' ),
 			'$prefix' => h\config_get( 'PREFIX' ),
@@ -99,11 +100,15 @@ class Asset_Manager {
 			'$debug' => h\get_defined( 'WP_DEBUG' ),
 		];
 
+		echo "<!-- Script Data of $plugin_name plugin -->";
+
 		\printf(
-			"<script>window['%s'] = JSON.parse('%s');</script>",
+			"<script>window['%s'] = %s;</script>",
 			\esc_js( h\prefix( 'script_data' ) ),
-			\wp_json_encode( array_merge( [], $this->script_data, $data ) )
+			h\safe_json_encode( array_merge( [], $this->script_data, $data ) )
 		);
+
+		echo "<!-- /Script Data of $plugin_name plugin -->";
 	}
 
 	protected function get_types () {
