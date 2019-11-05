@@ -84,6 +84,7 @@ class Asset_Manager {
 				);
 
 				if ( 'js' == $type && ! is_null( $script_data ) ) {
+					$script_data = \is_callable( $script_data ) ? \call_user_func( $script_data ) : $script_data;
 					$this->script_data = \array_merge( $this->script_data, $script_data );
 				}
 			}
