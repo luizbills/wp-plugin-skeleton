@@ -19,6 +19,9 @@ class Dependencies {
 
 		if ( count( $errors ) > 0 ) {
 			\do_action( h\prefix( 'handle_missing_dependencies' ), $errors );
+			return false;
 		}
+
+		return true;
 	}
 }
