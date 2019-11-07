@@ -13,12 +13,10 @@ function load_class ( $class, $method = 'init', $priority = 10 ) {
 }
 
 function get_load_class_methods () {
-	$contexts = \apply_filters(
+	return \apply_filters(
 		prefix( 'load_class_methods' ),
 		[ 'pre_boot', 'boot', 'init' ]
 	);
-
-	return \array_map( 'strtolower', $contexts );
 }
 
 function get_load_class_hook ( $method ) {
