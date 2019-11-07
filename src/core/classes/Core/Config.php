@@ -56,11 +56,13 @@ class Config {
 	}
 
 	public static function set ( $key, $value ) {
-		h\throw_if( null === $value, "Can't store 'null'." );
+		h\throw_if( null === $value, "Can't store 'null' in Config." );
+		$key = \strtoupper( $key );
 		return self::get_options()->set( $key, $value );
 	}
 
 	public static function get ( $key, $default = null ) {
+		$key = \strtoupper( $key );
 		if ( self::get_options()->has( $key ) ) {
 			return self::get_options()->get( $key );
 		}
