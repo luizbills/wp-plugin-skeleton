@@ -54,6 +54,7 @@ function forget_cache ( $key, $default = null ) {
 
 function clear_plugin_cache () {
 	if ( wp_using_ext_object_cache() ) {
+		log( 'CACHE NOT CLEARED. External Object Cache detected.' );
 		return;
 	}
 
@@ -106,5 +107,5 @@ function clear_plugin_cache () {
 		);
 	}
 
-	log_debug( 'CACHE CLEARED' );
+	log( 'CACHE CLEARED' );
 }
