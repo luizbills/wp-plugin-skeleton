@@ -28,7 +28,7 @@ class Asset_Manager {
 		$type = isset( $args['type'] ) ? $args['type'] : h\get_file_extension( $src );
 		$scripts = $this->store->get( $type, [] );
 
-		if ( h\str_starts_with( $src, 'http://' ) || h\str_starts_with( $src, 'https://' ) ) {
+		if ( h\str_starts_with( $src, [ 'http:', 'https:' ] ) ) {
 			$url = $src;
 		} else {
 			$url = h\get_asset_url( $src );
