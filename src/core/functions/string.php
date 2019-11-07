@@ -52,11 +52,21 @@ function str_slug ( $text, $separator = '-' ) {
 }
 
 function str_starts_with ( $string, $search ) {
-	return \substr( $string, 0, \strlen( $search ) ) === $search;
+	foreach ( (array) $search as $needle ) {
+		if ( \substr( $string, 0, \strlen( $needle ) ) === $needle ) {
+		    return true;
+		}
+	}
+	return false;
 }
 
 function str_ends_with ( $string, $search ) {
-	return \substr( $string, -\strlen( $search ) ) === $search;
+	foreach ( (array) $search as $needle ) {
+		if ( \substr( $string, -\strlen( $needle ) ) === $needle ) {
+			return true;
+		}
+	}
+	return false;
 }
 
 function str_add_quotes ( $string, $double = true ) {
