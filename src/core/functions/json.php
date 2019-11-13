@@ -2,8 +2,8 @@
 
 namespace src_namespace__\functions;
 
-function safe_json_encode ( $string ) {
-	$result = @json_encode( $string, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE );
+function safe_json_encode ( $data ) {
+	$result = @json_encode( $data, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE );
 	$error = \json_last_error() !== \JSON_ERROR_NONE ? \json_last_error_msg() : false;
 
 	if ( $error ) {
