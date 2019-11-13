@@ -85,6 +85,12 @@ abstract class Abstract_Ajax_Action {
 		$response['meta'] = [
 			'status_code' => $status_code
 		];
+		
+		// erase the output buffer
+		// to avoid unexpected outputs before the JSON
+		\ob_clean();
+		
+		// send JSON response
 		\wp_send_json( $response, $status_code );
 	}
 }
