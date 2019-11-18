@@ -15,6 +15,13 @@ function return_push_value ( $value ) {
 	};
 }
 
+function return_push_key_value ( $key, $value ) {
+	return function ( $arr ) use ( $key, $value ) {
+		$arr[ $key ] = $value;
+		return $arr;
+	};
+}
+
 function return_print_value ( $value ) {
 	return function () use ( $value ) {
 		echo $value;

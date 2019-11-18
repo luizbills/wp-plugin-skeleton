@@ -94,10 +94,11 @@ class Asset_Manager {
 	public function print_script_data () {
 		$plugin_name = h\config_get( 'NAME' );
 		$data = [
-			'$ajax_url' => \admin_url( 'admin-ajax.php' ),
+			'$ajax_url' => h\get_ajax_url(),
 			'$prefix' => h\config_get( 'PREFIX' ),
 			'$slug' => h\config_get( 'SLUG' ),
 			'$debug' => h\get_defined( 'WP_DEBUG' ),
+			'$nonces' => h\get_ajax_nonces(),
 		];
 
 		echo "<!-- Script Data of $plugin_name plugin -->";

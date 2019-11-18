@@ -2,17 +2,31 @@
 
 namespace src_namespace__\Common;
 
+use src_namespace__\functions as h;
+
 abstract class Abstract_Ajax_Action {
 	use Hooker_Trait;
+
+	abstract public function get_action_key ();
 
 	public function init () {
 		$this->add_action( 'wp_ajax_' . $this->get_action_name(), 'handle_request' );
 		if ( $this->is_public() ) {
 			$this->add_action( 'wp_ajax_nopriv_' . $this->get_action_name(), 'handle_request' );
 		}
+
+		if ( $this->get_nonce_action() ) {
+			h\register_ajax_nonce(
+				$this->get_action_key(),
+				$this->get_nonce_query_arg(),
+				\wp_create_nonce( $this->get_nonce_action() )
+			);
+		}
 	}
 
-	abstract public function get_action_name ();
+	public function get_action_name () {
+		return h\prefix( $this->get_action_key() );
+	}
 
 	public function is_public () {
 		return false;
@@ -48,12 +62,15 @@ abstract class Abstract_Ajax_Action {
 	protected function validate_request () {
 		// validate with wp nonce
 		$nonce_action = $this->get_nonce_action();
-		$query_arg = $this->get_nonce_query_arg();
-		if ( ! \check_ajax_referer( $nonce_action, $query_arg, false ) ) {
-			$this->send_json_error(
-				__( 'Forbidden Access.', 'reunidas-user-updater' ),
-				403
-			);
+
+		if ( $nonce_action ) {
+			$query_arg = $this->get_nonce_query_arg();
+			if ( ! \check_ajax_referer( $nonce_action, $query_arg, false ) ) {
+				$this->send_json_error(
+					__( 'Forbidden Access.', 'reunidas-user-updater' ),
+					403
+				);
+			}
 		}
 	}
 
@@ -85,12 +102,6 @@ abstract class Abstract_Ajax_Action {
 		$response['meta'] = [
 			'status_code' => $status_code
 		];
-		
-		// erase the output buffer
-		// to avoid unexpected outputs before the JSON
-		\ob_clean();
-		
-		// send JSON response
 		\wp_send_json( $response, $status_code );
 	}
 }
