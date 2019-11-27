@@ -30,15 +30,17 @@ final class Plugin_Dependencies {
 	}
 
 	public function print_errors ( $errors ) {
-		$name = h\config_get( 'NAME' );
-		$message = '<strong>' . esc_html__( "Missing requirements for $name. Please follow this instructions:" ) . '</strong>';
-		foreach ( $errors as $error ) {
-			$message .= sprintf( '<br>%s%s', \str_repeat( '&nbsp;', 4 ), $error );
-		}
-		h\include_php_template( 'admin-notice.php', [
-			'class' => 'error',
-			'message' => $message,
-		] );
+		add_action( 'admin_notices', function () use ( $errors ) {
+			$name = h\config_get( 'NAME' );
+			$message = '<strong>' . esc_html__( "Missing requirements for $name. Please follow this instructions:" ) . '</strong>';
+			foreach ( $errors as $error ) {
+				$message .= sprintf( '<br>%s%s', \str_repeat( '&nbsp;', 4 ), $error );
+			}
+			h\include_php_template( 'admin-notice.php', [
+				'class' => 'error',
+				'message' => $message,
+			] );
+		});
 	}
 
 	protected function get_required_php_version () {
