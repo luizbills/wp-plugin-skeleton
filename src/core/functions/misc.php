@@ -21,6 +21,11 @@ function get_defined ( $key, $default = false ) {
 	return $default;
 }
 
+function get_class_constants ( $class_name ) {
+	$reflect = new \ReflectionClass( $class_name );
+	return $reflect->getConstants();
+}
+
 function format ( ...$args ) {
 	$message = '';
 
