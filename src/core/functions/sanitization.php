@@ -6,7 +6,8 @@ namespace src_namespace__\functions;
 ```
 // Usage
 $values = sanitize( $_POST, [
-	'name' => [ 'alpha_spaces' ],
+	// key    => array of filters (https://github.com/luizbills/v/tree/master/src/filters)
+	'name'    => [ 'alpha_spaces' ],
 	'message' => [ 'escape' ]
 ] );
 ```
