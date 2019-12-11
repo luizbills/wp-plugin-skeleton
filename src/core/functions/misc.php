@@ -67,7 +67,6 @@ function add_plugin_action_link ( $label, $url, $atts_array = [], $priority = 10
 	);
 }
 
-
 function ns ( $include ) {
 	return config_get( 'NAMESPACE_BASE' ) . $include;
 }
