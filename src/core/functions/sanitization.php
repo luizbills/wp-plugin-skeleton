@@ -14,7 +14,7 @@ $values = sanitize( $_POST, [
 */
 function sanitize ( $fields, $filters, $defaults = [] ) {
 	$result = [];
-	$fields = array_merge( $defaults, $fields );
+	$fields = \array_merge( $defaults, $fields );
 
 	foreach ( $filters as $key => $filter ) {
 		$value = array_get( $fields, $key, '' );
@@ -28,7 +28,7 @@ function sanitize ( $fields, $filters, $defaults = [] ) {
 			}
 		}
 		elseif ( 'string' == gettype( $value ) ) {
-			$result[ $key ] = sanitize_value( $value, $filter );
+			$result[ $key ] = \v( $value, ...$filter );
 		}
 		else {
 			$result[ $key ] = $value;
@@ -36,8 +36,4 @@ function sanitize ( $fields, $filters, $defaults = [] ) {
 	}
 
 	return $result;
-}
-
-function sanitize_value ( $value, $filter = [] ) {
-	return v( $value, ...$filter );
 }
