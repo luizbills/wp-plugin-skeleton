@@ -4,7 +4,7 @@ namespace src_namespace__\functions;
 
 function value ( $value, $default = null ) {
 	$result = is_callable( $value ) ? call_user_func( $value ) : $value;
-	return isset( $result ) ? $default : $result;
+	return isset( $result ) ? $result : $default;
 }
 
 function maybe_define ( $key, $value = true, $force_upper_case = true ) {
