@@ -15,7 +15,11 @@ function load_class ( $class, $method = 'init', $priority = 10 ) {
 function get_load_class_methods () {
 	return \apply_filters(
 		prefix( 'load_class_methods' ),
-		[ 'pre_boot', 'boot', 'init' ]
+		[
+			'pre_boot', 
+			'boot', 
+			'init'
+		]
 	);
 }
 
@@ -26,6 +30,7 @@ function get_load_class_hook ( $method ) {
 function load_classes ( $method ) {
 	$wp_hook = get_load_class_hook( $method );
 	$classes = \apply_filters( $wp_hook, [] );
+	$real_method = "__$method";
 
 	foreach ( $classes as $class_name ) {
 		$instance = config_get_instance( $class_name, false );
@@ -35,10 +40,10 @@ function load_classes ( $method ) {
 		}
 
 		throw_if(
-			! \method_exists( $instance, $method ),
-			"The $class_name class don't has ${method}() method."
+			! \method_exists( $instance, $real_method ),
+			"The $class_name class don't has ${$real_method}() method."
 		);
 
-		$instance->$method();
+		$instance->$real_method();
 	}
 }
