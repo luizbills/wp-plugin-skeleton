@@ -2,7 +2,7 @@
 
 namespace src_namespace__\functions;
 
-function value ( $value, $default = null ) {
+function get ( $value, $default = null ) {
 	$result = is_callable( $value ) ? call_user_func( $value ) : $value;
 	return ! empty( $result ) ? $result : $default;
 }
