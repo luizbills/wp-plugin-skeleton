@@ -4,20 +4,23 @@ namespace src_namespace__\functions;
 
 function load_class ( $class, $method = 'init', $priority = 10 ) {
 	$methods = get_load_class_methods();
+	$real_method = "__$method";
 
 	throw_if( ! class_exists( $class ), "$class class not exists" );
 	throw_if( ! in_array( $method, $methods ), "Invalid load_class method argument: $method" );
 
-	$wp_hook = get_load_class_hook( $method );
-	\add_filter( $wp_hook, return_push_value( $class ), $priority );
+	if ( \method_exists( $class, $real_method ) ) {
+		$wp_hook = get_load_class_hook( $method );
+		\add_filter( $wp_hook, return_push_value( $class ), $priority );
+	}
 }
 
 function get_load_class_methods () {
 	return \apply_filters(
 		prefix( 'load_class_methods' ),
 		[
-			'pre_boot', 
-			'boot', 
+			'pre_boot',
+			'boot',
 			'init'
 		]
 	);
@@ -41,7 +44,7 @@ function load_classes ( $method ) {
 
 		throw_if(
 			! \method_exists( $instance, $real_method ),
-			"The $class_name class don't has ${$real_method}() method."
+			"The $class_name class don't has ${real_method}() method."
 		);
 
 		$instance->$real_method();
