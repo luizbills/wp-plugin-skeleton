@@ -15,7 +15,8 @@ $values = sanitize( $_POST, [
 function sanitize ( $fields, $filters, $defaults = [] ) {
 	$result = [];
 	$fields = \array_merge( $defaults, $fields );
-
+	
+	\v_set_context( get_v_context() );
 	foreach ( $filters as $key => $filter ) {
 		$value = array_get( $fields, $key, '' );
 		$filter = wrap( $filter );
@@ -34,6 +35,7 @@ function sanitize ( $fields, $filters, $defaults = [] ) {
 			$result[ $key ] = $value;
 		}
 	}
+	\v_reset_context();
 
 	return $result;
 }
