@@ -10,7 +10,7 @@ abstract class Abstract_Shortcode {
 	abstract public function get_shortcode_name ();
 	abstract public function get_output ( $atts, $content );
 
-	public function init () {
+	public function __init () {
 		\add_shortcode( $this->get_shortcode_name() , [ $this, 'callback' ] );
 	}
 
