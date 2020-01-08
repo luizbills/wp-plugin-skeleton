@@ -9,7 +9,7 @@ abstract class Abstract_Ajax_Action {
 
 	abstract public function get_action_key ();
 
-	public function init () {
+	public function __init () {
 		$this->add_action( 'wp_ajax_' . $this->get_action_name(), 'handle_request' );
 		if ( $this->is_public() ) {
 			$this->add_action( 'wp_ajax_nopriv_' . $this->get_action_name(), 'handle_request' );
