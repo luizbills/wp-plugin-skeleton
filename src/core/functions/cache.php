@@ -5,7 +5,7 @@
 
 namespace src_namespace__\functions;
 
-function remember_cache ( $key, $value, $expire = 0 ) {
+function remember_cache ( $key, $value, $expire_in_minutes = 0 ) {
 	$cache_disabled = \apply_filters(
 		prefix( 'remember_cache_disabled' ),
 		config_get( 'DISABLE_CACHE', false ),
@@ -18,10 +18,7 @@ function remember_cache ( $key, $value, $expire = 0 ) {
 		return $result;
 	}
 
-	$key_prefix = \apply_filters( prefix( 'remember_cache_key_prefix' ), prefix(), $key );
-	$key_suffix = \apply_filters( prefix( 'remember_cache_key_suffix' ), '_' . config_get( 'VERSION', '' ), $key );
-
-	$transient_key = $key_prefix . $key . $key_suffix;
+	$transient_key = build_cache_key( $key );
 	$cached = \get_transient( $transient_key );
 
 	if ( false !== $cached ) {
@@ -29,7 +26,11 @@ function remember_cache ( $key, $value, $expire = 0 ) {
 	}
 
 	if ( false !== $result && null !== $result && ! \is_wp_error( $result ) ) {
-		$expire = \apply_filters( prefix( 'remember_cache_expiration' ), $expire, $key );
+		$expire = \apply_filters(
+			prefix( 'remember_cache_expiration' ),
+			$expire_in_minutes * \MINUTE_IN_SECONDS,
+			$key
+		);
 		\set_transient( $transient_key, $result, $expire );
 		log( "function remember_cache store key $key with value:", $result );
 	}
@@ -38,14 +39,11 @@ function remember_cache ( $key, $value, $expire = 0 ) {
 }
 
 function forget_cache ( $key, $default = null ) {
-	$key_prefix = \apply_filters( prefix( 'remember_cache_key_prefix' ), prefix(), $key );
-	$key_suffix = \apply_filters( prefix( 'remember_cache_key_suffix' ), '_' . config_get( 'VERSION', '' ), $key );
-
-	$transient_key = $key_prefix . $key . $key_suffix;
-	$cached = \get_transient( $key );
+	$transient_key = build_cache_key( $key );
+	$cached = \get_transient( $transient_key );
 
 	if ( false !== $cached ) {
-		\delete_transient( $key );
+		\delete_transient( $transient_key );
 		log( "function remember_cache deleted key $key with value:", $cached );
 		return $cached;
 	}
@@ -53,13 +51,13 @@ function forget_cache ( $key, $default = null ) {
 }
 
 function clear_plugin_cache () {
-	if ( wp_using_ext_object_cache() ) {
+	if ( \wp_using_ext_object_cache() ) {
 		log( 'External Object Cache detected. Cache NOT cleared.' );
 		return;
 	}
 
 	global $wpdb;
-	$prefix = prefix();
+	$prefix = get_cache_key_prefix();
 
 	$wpdb->query(
 		$wpdb->prepare(
@@ -75,7 +73,7 @@ function clear_plugin_cache () {
 		)
 	);
 
-	if ( ! is_multisite() ) {
+	if ( ! \is_multisite() ) {
 		// non-Multisite stores site transients in the options table.
 		$wpdb->query(
 			$wpdb->prepare(
@@ -90,7 +88,7 @@ function clear_plugin_cache () {
 				time()
 			)
 		);
-	} elseif ( is_multisite() && is_main_site() && is_main_network() ) {
+	} elseif ( \is_multisite() && \is_main_site() && \is_main_network() ) {
 		// Multisite stores site transients in the sitemeta table.
 		$wpdb->query(
 			$wpdb->prepare(
@@ -108,4 +106,24 @@ function clear_plugin_cache () {
 	}
 
 	log( 'Cache cleared!' );
+}
+
+function build_cache_key ( $key ) {
+	return get_cache_key_prefix() . $key . get_cache_key_suffix();
+}
+
+function get_cache_key_prefix () {
+	return \apply_filters(
+		prefix( 'cache_key_prefix' ),
+		prefix(),
+		$key
+	);
+}
+
+function get_cache_key_suffix () {
+	return \apply_filters(
+		prefix( 'cache_key_suffix' ),
+		'_' . config_get( 'VERSION', '' ),
+		$key
+	);
 }
