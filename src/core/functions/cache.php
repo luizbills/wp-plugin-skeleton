@@ -5,15 +5,17 @@
 
 namespace src_namespace__\functions;
 
-function remember_cache ( $key, $callback, $expire = 0 ) {
+function remember_cache ( $key, $value, $expire = 0 ) {
 	$cache_disabled = \apply_filters(
 		prefix( 'remember_cache_disabled' ),
 		config_get( 'DISABLE_CACHE', false ),
 		$key
 	);
+	$result = is_callable( $value ) ? call_user_func( $value ) : $value;
+
 	if ( $cache_disabled ) {
 		log( "function remember_cache disabled for $key" );
-		return $callback();
+		return $result;
 	}
 
 	$key_prefix = \apply_filters( prefix( 'remember_cache_key_prefix' ), prefix(), $key );
@@ -26,15 +28,13 @@ function remember_cache ( $key, $callback, $expire = 0 ) {
 		return $cached;
 	}
 
-	$value = $callback();
-
-	if ( false !== $value && null !== $value && ! \is_wp_error( $value ) ) {
+	if ( false !== $result && null !== $result && ! \is_wp_error( $result ) ) {
 		$expire = \apply_filters( prefix( 'remember_cache_expiration' ), $expire, $key );
-		\set_transient( $transient_key, $value, $expire );
-		log( "function remember_cache store key $key with value:", $value );
+		\set_transient( $transient_key, $result, $expire );
+		log( "function remember_cache store key $key with value:", $result );
 	}
 
-	return $value;
+	return $result;
 }
 
 function forget_cache ( $key, $default = null ) {
@@ -54,7 +54,7 @@ function forget_cache ( $key, $default = null ) {
 
 function clear_plugin_cache () {
 	if ( wp_using_ext_object_cache() ) {
-		log( 'CACHE NOT CLEARED. External Object Cache detected.' );
+		log( 'External Object Cache detected. Cache NOT cleared.' );
 		return;
 	}
 
@@ -107,5 +107,5 @@ function clear_plugin_cache () {
 		);
 	}
 
-	log( 'CACHE CLEARED' );
+	log( 'Cache cleared!' );
 }
