@@ -14,7 +14,7 @@ function include_php_template ( $template_path, $data = [] ) {
 		'plugin' => config_get( 'ROOT_DIR' ) . '/' . config_get( 'TEMPLATES_DIR' )
 	];
 	
-	$found = false
+	$found = false;
 
 	foreach ( $paths as $_ => $base_path ) {
 		if ( \file_exists( "$base_path/$template_path" ) ) {
