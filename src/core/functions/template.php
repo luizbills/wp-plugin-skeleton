@@ -13,6 +13,8 @@ function include_php_template ( $template_path, $data = [] ) {
 		// search in plugin templates
 		'plugin' => config_get( 'ROOT_DIR' ) . '/' . config_get( 'TEMPLATES_DIR' )
 	];
+	
+	$found = false
 
 	foreach ( $paths as $_ => $base_path ) {
 		if ( \file_exists( "$base_path/$template_path" ) ) {
@@ -23,7 +25,8 @@ function include_php_template ( $template_path, $data = [] ) {
 			v_reset_context();
 
 			// exit after render once
-			return;
+			$found = true;
+			break;
 		}
 	}
 
