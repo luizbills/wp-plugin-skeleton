@@ -11,6 +11,7 @@ class Asset_Manager {
 
 	protected $store;
 	protected $script_data = [];
+	protected $enqueued = false;
 
 	public function __construct () {
 		$this->store = new Data_Store( [
@@ -67,6 +68,8 @@ class Asset_Manager {
 				if ( $is_admin !== $in_admin ) continue;
 				if ( ! call_user_func( $condition ) ) continue;
 
+				$this->$enqueued = true;
+
 				$function[ $type ](
 					$handle,
 					$src,
@@ -92,24 +95,23 @@ class Asset_Manager {
 	}
 
 	public function print_script_data () {
-		$plugin_name = h\config_get( 'NAME' );
-		$data = [
-			'$ajax_url' => h\get_ajax_url(),
-			'$prefix' => h\config_get( 'PREFIX' ),
-			'$slug' => h\config_get( 'SLUG' ),
-			'$debug' => h\get_defined( 'WP_DEBUG' ),
-			'$nonces' => h\get_ajax_nonces(),
-		];
-
-		echo "<!-- Script Data of $plugin_name plugin -->";
-
-		\printf(
-			"<script>window['%s'] = %s;</script>",
-			\esc_js( h\prefix( 'script_data' ) ),
-			h\safe_json_encode( array_merge( [], $this->script_data, $data ) )
-		);
-
-		echo "<!-- /Script Data of $plugin_name plugin -->";
+		if ( $this->$enqueued ) {
+			$plugin_name = h\config_get( 'NAME' );
+			$data = [
+				'$ajax_url' => h\get_ajax_url(),
+				'$prefix' => h\config_get( 'PREFIX' ),
+				'$slug' => h\config_get( 'SLUG' ),
+				'$debug' => h\get_defined( 'WP_DEBUG' ),
+				'$nonces' => h\get_ajax_nonces(),
+			];
+			echo "<!-- Script Data of $plugin_name plugin -->";
+			\printf(
+				'<script>window.wp_script_data=window.wp_script_data||{};wp_script_data[\'%s\']=%s</script>',
+				\esc_js( h\str_slug( h\config_get( 'SLUG' ), '_' ) ),
+				h\safe_json_encode( array_merge( [], $this->script_data, $data ) )
+			);
+			echo "<!-- /Script Data of $plugin_name plugin -->";
+		}
 	}
 
 	protected function get_types () {
