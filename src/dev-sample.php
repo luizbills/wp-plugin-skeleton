@@ -6,16 +6,16 @@ use src_namespace__\functions as h;
 
 // test and simulate things here
 class Test {
-	public function pre_boot () {
+	public function __pre_boot () {
 		// some code here
 	}
 	
-	public function boot () {
+	public function __boot () {
 		// some code here
 	}
 
-	public function init () {
-		// or here
+	public function __init () {
+		// some code here
 	}
 }
 
