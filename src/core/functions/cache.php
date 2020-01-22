@@ -126,5 +126,6 @@ function get_cache_key_prefix () {
 }
 
 function get_cache_key_suffix () {
-	return \apply_filters( prefix( 'cache_key_suffix' ),'_' . config_get( 'VERSION', '' ) );
+	$plugin_version = config_get( 'VERSION', '' );
+	return \apply_filters( prefix( 'cache_key_suffix' ), "_{$plugin_version}" );
 }
