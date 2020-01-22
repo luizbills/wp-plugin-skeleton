@@ -5,6 +5,16 @@
 
 namespace src_namespace__\functions;
 
+function fetch_cache ( $key, $default = null ) {
+	$transient_key = build_cache_key( $key );
+	$cached = \get_transient( $transient_key );
+
+	if ( false !== $cached ) {
+		return $cached;
+	}
+	return $default;
+}
+
 function remember_cache ( $key, $value, $expire_in_minutes = 0 ) {
 	$cache_disabled = \apply_filters(
 		prefix( 'remember_cache_disabled' ),
@@ -18,19 +28,20 @@ function remember_cache ( $key, $value, $expire_in_minutes = 0 ) {
 		return $result;
 	}
 
-	$transient_key = build_cache_key( $key );
-	$cached = \get_transient( $transient_key );
+	$cached = fetch_cache( $key, false );
 
 	if ( false !== $cached ) {
 		return $cached;
 	}
 
 	if ( false !== $result && null !== $result && ! \is_wp_error( $result ) ) {
+		$transient_key = build_cache_key( $key );
 		$expire = \apply_filters(
 			prefix( 'remember_cache_expiration' ),
 			$expire_in_minutes * \MINUTE_IN_SECONDS,
 			$key
 		);
+
 		\set_transient( $transient_key, $result, $expire );
 		log( "function remember_cache store key $key with value:", $result );
 	}
@@ -39,10 +50,10 @@ function remember_cache ( $key, $value, $expire_in_minutes = 0 ) {
 }
 
 function forget_cache ( $key, $default = null ) {
-	$transient_key = build_cache_key( $key );
-	$cached = \get_transient( $transient_key );
+	$cached = fetch_cache( $key, false );
 
 	if ( false !== $cached ) {
+		$transient_key = build_cache_key( $key );
 		\delete_transient( $transient_key );
 		log( "function remember_cache deleted key $key with value:", $cached );
 		return $cached;
@@ -113,17 +124,9 @@ function build_cache_key ( $key ) {
 }
 
 function get_cache_key_prefix () {
-	return \apply_filters(
-		prefix( 'cache_key_prefix' ),
-		prefix(),
-		$key
-	);
+	return \apply_filters( prefix( 'cache_key_prefix' ), prefix() );
 }
 
 function get_cache_key_suffix () {
-	return \apply_filters(
-		prefix( 'cache_key_suffix' ),
-		'_' . config_get( 'VERSION', '' ),
-		$key
-	);
+	return \apply_filters( prefix( 'cache_key_suffix' ),'_' . config_get( 'VERSION', '' ) );
 }
