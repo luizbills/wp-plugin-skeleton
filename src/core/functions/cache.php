@@ -1,7 +1,5 @@
 <?php
-/**
- * Based on https://github.com/stevegrunwell/wp-cache-remember/tree/v1.1.1
- */
+// Inspired by https://github.com/stevegrunwell/wp-cache-remember
 
 namespace src_namespace__\functions;
 
