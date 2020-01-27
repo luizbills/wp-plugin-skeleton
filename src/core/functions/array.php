@@ -22,21 +22,6 @@ function array_divide ( $arr ) {
 	return [ \array_keys( $arr ), \array_values( $arr ) ];
 }
 
-function array_pull ( &$arr, $key, $default = null ) {
-	$value = array_get( $arr, $key, $default );
-	unset( $arr[ $key ] );
-	return $value;
-}
-
-function array_forget ( &$arr, $keys ) {
-	foreach ( (array) $keys as $key ) {
-		if ( isset( $arr[ $key ] ) ) {
-			unset( $arr[ $key ] );
-		}
-	}
-	return $arr;
-}
-
 function array_only ( $arr, $keys ) {
 	return \array_intersect_key( $arr, \array_flip( (array) $keys ) );
 }
@@ -52,12 +37,17 @@ function array_group_by_prefix ( $arr, $prefix ) {
 	return $group;
 }
 
-// array_assign function was deleted, use \array_merge
-// and ensure only allowed keys with array_only function
-
-function array_ensure_keys ( &$arr, $keys, $value = '' ) {
+function array_ensure_keys ( &$arr, $keys, $default = '' ) {
 	foreach ( $keys as $key ) {
-		$arr[ $key ] = array_get( $arr, $key, $value );
+		$arr[ $key ] = array_get( $arr, $key, $default );
 	}
 	return $arr;
+}
+
+function array_find ( $array, $args, $operator = 'AND' ) {
+	return array_head(
+		\wp_list_filter( $array, $args, $operator ),
+		0,
+		null
+	);
 }
