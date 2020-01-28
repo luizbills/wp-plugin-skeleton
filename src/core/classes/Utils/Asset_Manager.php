@@ -68,7 +68,7 @@ class Asset_Manager {
 				if ( $is_admin !== $in_admin ) continue;
 				if ( ! call_user_func( $condition ) ) continue;
 
-				$this->$enqueued = true;
+				$this->enqueued = true;
 
 				$function[ $type ](
 					$handle,
@@ -95,7 +95,7 @@ class Asset_Manager {
 	}
 
 	public function print_script_data () {
-		if ( $this->$enqueued ) {
+		if ( $this->enqueued ) {
 			$plugin_name = h\config_get( 'NAME' );
 			$data = [
 				'$ajax_url' => h\get_ajax_url(),
