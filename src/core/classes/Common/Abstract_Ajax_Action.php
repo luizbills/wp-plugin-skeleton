@@ -66,6 +66,10 @@ abstract class Abstract_Ajax_Action {
 		if ( $nonce_action ) {
 			$query_arg = $this->get_nonce_query_arg();
 			if ( ! \check_ajax_referer( $nonce_action, $query_arg, false ) ) {
+				$message = \apply_filters(
+					h\prefix( 'ajax_message_forbidden_access' ),
+					'Forbidden Access.'
+				);
 				$this->send_json_error(
 					__( 'Forbidden Access.', 'reunidas-user-updater' ),
 					403
@@ -75,8 +79,12 @@ abstract class Abstract_Ajax_Action {
 	}
 
 	protected function send_default_response () {
+		$message = \apply_filters(
+			h\prefix( 'ajax_message_invalid_request_method' ),
+			'Invalid request method.'
+		);
 		$this->send_json_error(
-			__( 'Invalid request method.', 'reunidas-user-updater' ),
+			$message,
 			405
 		);
 	}
