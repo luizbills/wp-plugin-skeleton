@@ -7,6 +7,12 @@ function get ( $value, $default = null ) {
 	return ! empty( $result ) ? $result : $default;
 }
 
+function value ( $value, $default = null ) {
+	$function = __FUNCTION__;
+	log( '"h\value()" is deprecated! Use "h\get()" (in core/functions/misc.php) instead.' );
+	return get( $value, $default );
+}
+
 function maybe_define ( $key, $value = true, $force_upper_case = true ) {
 	$key = $force_upper_case ? \strtoupper( $key ) : $key;
 	if ( ! defined( $key ) ) {
