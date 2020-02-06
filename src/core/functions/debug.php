@@ -33,10 +33,15 @@ function handle_exception ( \Throwable $exception, Callable $callback ) {
 	return false;
 }
 
-function log ( ...$args ) {
+function logf ( ...$args ) {
 	$is_enabled = \apply_filters( prefix( 'debug_log_enabled' ), get_defined( 'WP_DEBUG_LOG', false ) );
 	if ( ! $is_enabled ) return;
 	\error_log( config_get( 'SLUG' ) . ': ' . format( ...$args ) );
+}
+
+function log ( ...$args ) {
+	\error_log( '[WARNING] ' . __FUNCTION__ . ' is deprecated! Use "h\logf()" (in core/functions/debug.php) instead.' );
+	return logf( ...$args );
 }
 
 function dd ( $value ) {
