@@ -8,8 +8,7 @@ function get ( $value, $default = null ) {
 }
 
 function value ( $value, $default = null ) {
-	$function = __FUNCTION__;
-	log( '"h\value()" is deprecated! Use "h\get()" (in core/functions/misc.php) instead.' );
+	\error_log( '[WARNING] ' . __FUNCTION__ . ' is deprecated! Use "h\get()" (in core/functions/misc.php) instead.' );
 	return get( $value, $default );
 }
 
