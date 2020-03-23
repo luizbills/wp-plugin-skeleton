@@ -25,5 +25,5 @@ function notify ( $message, $options = [] ) {
 	}
 
 	\do_action( prefix( 'notify' ), $options );
-	log( "Notification sent: {$message}" );
+	logf( "Notification sent: {$message}" );
 }
