@@ -3,27 +3,40 @@
 namespace src_namespace__\functions;
 
 function notify ( $message, $options = [] ) {
-	if ( \apply_filters( prefix( 'notify_email_enabled' ), true ) ) {
-		$recipients = array_get( $options, 'email_recipients', [] );
-		$subject = array_get( $options, 'email_subject', config_get( 'NAME' ) . ' Notification' );
-		$headers = [
-			array_get( $options, 'email_content_type', 'content-type: text/html; charset=utf-8' )
-		];
+	// default handler
+	if ( isset( $options['email'] ) ) {
+		$opts = array_get( $options, 'email', [] );
+
+		$recipients    = array_get( $opts, 'recipients', [] );
+		$subject       = array_get( $opts, 'subject', config_get( 'NAME' ) . ' Notification' );
+		$content_type  = array_get( $opts, 'content_type', 'content-type: text/html; charset=utf-8' );
 
 		// notify site admin by default
-		if ( array_get( $options, 'email_to_admin', true ) ) {
+		if ( array_get( $opts, 'to_admin', true ) ) {
 			$recipients[] = \get_bloginfo( 'admin_email' );
 		}
 
-		// send email
-		\wp_mail(
-			\apply_filters( prefix( 'notify_email_recipients' ), $recipients, $options ),
-			\apply_filters( prefix( 'notify_email_subject' ), $subject, $options ),
-			\apply_filters( prefix( 'notify_email_message' ), $message, $options ),
-			\apply_filters( prefix( 'notify_email_headers' ), $headers, $options )
-		);
+		if ( isset( $opts['handler'] ) && is_callable( $opts['handler'] ) ) {
+			call_user_func( $opts['handler'], $message, $opts );
+		} else {
+			\wp_mail(
+				\apply_filters( prefix( 'notify_email_recipients' ), $recipients, $opts ),
+				\apply_filters( prefix( 'notify_email_subject' ), $subject, $opts ),
+				\apply_filters( prefix( 'notify_email_message' ), $message, $opts ),
+				\apply_filters( prefix( 'notify_email_headers' ), $headers, $opts )
+			);
+		}
 	}
 
-	\do_action( prefix( 'notify' ), $options );
+	unset( $options['email'] );
+
+	foreach ( $options as $type => $opts ) {
+		if ( isset( $opts['handler'] ) && is_callable( $opts['handler'] ) ) {
+			call_user_func( $opts['handler'], $message, $opts );
+		} else {
+			\do_action( h\prefix( "handle_notification_$type" ), $message, $opts );
+		}
+	}
+
 	logf( "Notification sent: {$message}" );
 }
