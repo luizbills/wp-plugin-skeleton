@@ -2,8 +2,13 @@
 
 namespace src_namespace__\functions;
 
+function is_function ( $func ) {
+	if ( is_object( $func ) && $func instanceof \Closure ) return true;
+	return false;
+}
+
 function get ( $value, $default = null ) {
-	$result = is_callable( $value ) ? call_user_func( $value ) : $value;
+	$result = is_function( $value ) ? $value() : $value;
 	return ! empty( $result ) ? $result : $default;
 }
 
