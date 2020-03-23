@@ -78,7 +78,7 @@ class Asset_Manager {
 					'js' == $type ? $in_footer : $media
 				);
 
-				h\log(
+				h\logf(
 					sprintf(
 						'Enqueued %s: path=%s',
 						\strtoupper( $type ),
