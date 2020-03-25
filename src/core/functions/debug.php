@@ -14,23 +14,38 @@ function throw_if ( $condition, $message, $error_id = '' ) {
 	return $condition;
 }
 
-function handle_exception ( \Throwable $exception, Callable $callback ) {
+function handle_exception ( \Throwable $exception, $callback = null ) {
 	$message = $exception->getMessage();
 	$slug = config_get( 'SLUG' );
-	if ( str_starts_with( $message, "[$slug-" ) ) {
+	$error_prefix = "[$slug-error";
+
+	if ( str_starts_with( $message, $error_prefix ) ) {
 		$parts = \explode( ']', $message );
-		if ( count( $parts ) < 2 ) {
-			return false;
-		}
+
 		// get error id
-		$error_id = \array_shift( $parts );
-		$error_id = preg_replace( "/^\[$slug-/", '', $error_id );
+		$pattern = '/^' . \preg_quote( $error_prefix, '/' ) . '-?/';
+		$error_id = \preg_replace( $pattern, '', \array_shift( $parts ) );
+
 		// get message
 		$error_message = \implode( ']', $parts );
+
 		// handle
-		return $callback( trim( $error_message ), trim( $error_id ) );
+		$http_code = is_callable( $callback)
+			? $callback( trim( $error_message ), trim( $error_id ) )
+			: false;
+
+		return [
+			'error_message' => $error_message,
+			'error_id'      => $error_id,
+			'code'          => $http_code ? intval( $http_code ) : 400,
+		];
 	}
-	return false;
+
+	return [
+		'error_message' => $exception->getMessage(),
+		'error_id'      => 'unexpected-error',
+		'code'          => 500,
+	];
 }
 
 function logf ( ...$args ) {
