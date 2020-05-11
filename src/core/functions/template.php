@@ -15,19 +15,25 @@ function include_php_template ( $template_path, $data = [] ) {
 	];
 	
 	$found = false;
+	
+	try {
+		foreach ( $paths as $_ => $base_path ) {
+			if ( \file_exists( "$base_path/$template_path" ) ) {
+				$var = \apply_filters( prefix( 'php_template_data' ), $data, $template_path );
+				// render
+				v_set_context( get_v_context() );
+				include "$base_path/$template_path";
+				v_reset_context();
 
-	foreach ( $paths as $_ => $base_path ) {
-		if ( \file_exists( "$base_path/$template_path" ) ) {
-			$var = \apply_filters( prefix( 'php_template_data' ), $data, $template_path );
-			// render
-			v_set_context( get_v_context() );
-			include "$base_path/$template_path";
-			v_reset_context();
-
-			// exit after render once
-			$found = true;
-			break;
+				// exit after render once
+				$found = true;
+				break;
+			}
 		}
+	} catch ( \Exception $e ) {
+		$message = "Error while rendenring "$template_path" template: " . $e->getMessage();
+		echo user_is_admin() ? "<p class='wp-template-error'>$message</p>" : '';
+		logf( $message );
 	}
 
 	// throws an error if the template are not found
