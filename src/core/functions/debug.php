@@ -43,7 +43,7 @@ function handle_exception ( \Throwable $exception, $callback = null ) {
 
 	return [
 		'error_message' => $exception->getMessage(),
-		'error_id'      => 'unexpected-error',
+		'error_id'      => 'unhandled-error',
 		'code'          => 500,
 	];
 }
