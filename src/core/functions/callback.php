@@ -21,10 +21,3 @@ function return_push_key_value ( $key, $value ) {
 		return $arr;
 	};
 }
-
-function return_print_value ( $value ) {
-	return function () use ( $value ) {
-		echo $value;
-		return $value;
-	};
-}
