@@ -14,11 +14,12 @@ function include_php_template ( $template_path, $data = [] ) {
 		'plugin' => config_get( 'ROOT_DIR' ) . '/' . config_get( 'TEMPLATES_DIR' )
 	];
 	
-	$found = false;
+	$__found = false;
 	
 	try {
 		foreach ( $paths as $_ => $base_path ) {
 			if ( \file_exists( "$base_path/$template_path" ) ) {
+				$__found = true;
 				$var = \apply_filters( prefix( 'php_template_data' ), $data, $template_path );
 				// render
 				v_set_context( get_v_context() );
@@ -26,7 +27,6 @@ function include_php_template ( $template_path, $data = [] ) {
 				v_reset_context();
 
 				// exit after render once
-				$found = true;
 				break;
 			}
 		}
@@ -37,7 +37,7 @@ function include_php_template ( $template_path, $data = [] ) {
 	}
 
 	// throws an error if the template are not found
-	throw_if( ! $found, "Can't locate template file: $template_path" );
+	throw_if( ! $__found, "Can't locate template file: $template_path" );
 }
 
 function get_php_template ( $template_path, $data = [] ) {
