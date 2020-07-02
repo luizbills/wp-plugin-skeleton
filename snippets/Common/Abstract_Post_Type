@@ -4,7 +4,9 @@ namespace {ns}\Common;
 
 abstract class Abstract_Post_Type {
 	public function register_post_type () {
-		\register_post_type( $this->get_slug(), $this->get_args() );
+		$args = $this->get_args();
+		$args['labels'] = $this->get_labels();
+		\register_post_type( $this->get_slug(), $args );
 	}
 
 	// Post type key. Must not exceed 20 characters
