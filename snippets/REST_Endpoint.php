@@ -16,11 +16,11 @@ class REST_Endpoint {
 		// DOC: https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/
 		\register_rest_route( 'prefix/v1', '/action', array(
 			'methods' => 'POST',
-			'callback' => [ $this, 'handle_webhook' ],
+			'callback' => [ $this, 'handle_post_request' ],
 		) );
 	}
 
-	public function handle_webhook ( \WP_REST_Request $req ) {
+	public function handle_post_request ( \WP_REST_Request $req ) {
 		$return = [ 'success' => true ];
 
 		$response = new \WP_REST_Response( $return );
