@@ -79,3 +79,7 @@ function add_plugin_action_link ( $label, $url, $atts_array = [], $priority = 10
 function ns ( $include ) {
 	return config_get( 'NAMESPACE_BASE' ) . $include;
 }
+
+function get_current_url () {
+	return ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? "https" : "http" ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+}
