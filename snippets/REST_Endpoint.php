@@ -17,6 +17,7 @@ class REST_Endpoint {
 		\register_rest_route( 'prefix/v1', '/action', array(
 			'methods' => 'POST',
 			'callback' => [ $this, 'handle_post_request' ],
+			'permission_callback' => '__return_true',
 		) );
 	}
 
