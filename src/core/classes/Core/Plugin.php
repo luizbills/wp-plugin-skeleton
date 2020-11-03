@@ -23,11 +23,10 @@ final class Plugin {
 	protected function __construct ( $main_file ) {
 		$root = \dirname( $main_file );
 		require_once $root . '/core/load_helpers.php';
-
-		$this->whoops();
-
+		
 		Config::setup( $main_file );
-
+		
+		$this->whoops();
 		$this->pre_boot();
 		$this->add_hooks();
 
@@ -77,6 +76,7 @@ final class Plugin {
 		);
 
 		if ( $use_whoops ) {
+			@error_reporting( E_ERROR | E_WARNING | E_PARSE );
 			$whoops = h\config_set( 'whoops_instance', new \Whoops\Run() );
 			$whoops->pushHandler( new \Whoops\Handler\PrettyPageHandler() );
 			$whoops->register();
