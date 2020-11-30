@@ -59,6 +59,15 @@ abstract class Abstract_Ajax_Action {
 		return '_ajax_nonce';
 	}
 
+	public function get_nonce_field ( $referer = true ) {
+		return \wp_nonce_field(
+			$this->get_nonce_action(),
+			$this->get_nonce_query_arg(),
+			$referer,
+			false
+		);
+	}
+
 	protected function validate_request () {
 		// validate with wp nonce
 		$nonce_action = $this->get_nonce_action();
