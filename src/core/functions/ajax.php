@@ -15,8 +15,9 @@ function register_ajax_nonce ( $key, $arg, $nonce ) {
 	);
 }
 
-function get_ajax_nonces () {
-	return \apply_filters( prefix( 'ajax_nonces' ), [] );
+function get_ajax_nonces ( $key = '' ) {
+	$nonces = \apply_filters( prefix( 'ajax_nonces' ), [] );
+	return $key ? array_get( $nonces, $key, false ) : $nonces;
 }
 
 function get_ajax_url () {
