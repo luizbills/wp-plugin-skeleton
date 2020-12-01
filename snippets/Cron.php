@@ -1,6 +1,6 @@
 <?php
 
-namespace {ns}\Cron;
+namespace {ns};
 
 use {ns}\functions as h;
 use {ns}\Common\Hooker_Trait;
