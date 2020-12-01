@@ -41,9 +41,7 @@ abstract class Abstract_Post_Type {
 		$data['post_type'] = $this->get_slug();
 		$post_id = $new ? \wp_insert_post( $data ) : wp_update_post( $data );
 
-		if ( $new ) {
-			$this->post = h\get_post_by_type( $post_id, $this->get_slug() );
-		}
+		if ( $new ) $this->post = h\get_post_by_type( $post_id, $this->get_slug() );
 
 		return $this->post;
 	}
@@ -63,5 +61,9 @@ abstract class Abstract_Post_Type {
 
 	public function add_meta ( $key, $value ) {
 		return \add_post_meta( $this->get_id(), $key, $value );
+	}
+	
+	public function delete ( $bypass_trash = false ) {
+		return $bypass_trash ? \wp_delete_post( $this->get_id(), true ) : \wp_trash_post(  $this->get_id() );
 	}
 }
