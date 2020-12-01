@@ -7,8 +7,8 @@ namespace {ns};
  *
  * Example usage:
  *
- *     $theme_routes = new CustomRoutes();
- *     $theme_routes->addRoute(
+ *     $routes = new Router();
+ *     $routes->addRoute(
  *
  *         // required, regex to match the route
  *         '^api/([^/]*)/([^/]*)/?',
@@ -32,9 +32,7 @@ namespace {ns};
  * Also:
  *
  *     // Force flush rewrite rules.
- *     $theme_routes->forceFlush();
- *
- * @author Sam Hernandez (hernandez@happycog.com)
+ *     $routes->forceFlush();
  */
 
 class Router {
