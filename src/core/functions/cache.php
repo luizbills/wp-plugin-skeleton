@@ -13,7 +13,7 @@ function fetch_cache ( $key, $default = null ) {
 	return $default;
 }
 
-function remember_cache ( $key, $value, $expire_in_minutes = 0 ) {
+function remember_cache ( $key, $value, $expires_in = 0, $period = 'minutes' ) {
 	$cache_disabled = \apply_filters(
 		prefix( 'remember_cache_disabled' ),
 		config_get( 'DISABLE_CACHE', false ),
@@ -25,7 +25,6 @@ function remember_cache ( $key, $value, $expire_in_minutes = 0 ) {
 		logf( "function remember_cache disabled for $key" );
 		return $result;
 	}
-
 	$cached = fetch_cache( $key, false );
 
 	if ( false !== $cached ) {
@@ -34,13 +33,13 @@ function remember_cache ( $key, $value, $expire_in_minutes = 0 ) {
 
 	if ( false !== $result && null !== $result && ! \is_wp_error( $result ) ) {
 		$transient_key = build_cache_key( $key );
-		$expire = \apply_filters(
+		$duration = \apply_filters(
 			prefix( 'remember_cache_expiration' ),
-			$expire_in_minutes * \MINUTE_IN_SECONDS,
+			to_seconds( $expires_in, $period ),
 			$key
 		);
 
-		\set_transient( $transient_key, $result, $expire );
+		\set_transient( $transient_key, $result, $duration );
 		logf( "function remember_cache store key $key with value:", $result );
 	}
 
