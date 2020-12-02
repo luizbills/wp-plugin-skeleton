@@ -83,3 +83,22 @@ function ns ( $include ) {
 function get_current_url () {
 	return ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? "https" : "http" ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 }
+
+function to_seconds ( $amount, $period = 'minutes' ) {
+	$time_periods = [
+		'seconds' => 1,
+		'minutes' => 60,
+		'hours'   => 60 * MINUTE_IN_SECONDS,
+		'days'    => 24 * HOUR_IN_SECONDS,
+		'weeks'   => 7 * DAY_IN_SECONDS,
+		'months'  => 30 * DAY_IN_SECONDS,
+		'years'   => 365 * DAY_IN_SECONDS,
+	];
+
+	throw_if(
+		! isset( $period, $time_periods ),
+		"unknown \"$period\" period passed in " . __FUNCTION__
+	);
+
+	return $amount * $time_periods[ $period ];
+}
