@@ -62,7 +62,7 @@ function notify ( $message, $options = [] ) {
 		if ( isset( $opts['handler'] ) && is_callable( $opts['handler'] ) ) {
 			call_user_func( $opts['handler'], $message, $opts );
 		} else {
-			\do_action( h\prefix( "handle_notification_$type" ), $message, $opts );
+			\do_action( prefix( "handle_notification_$type" ), $message, $opts );
 		}
 	}
 
