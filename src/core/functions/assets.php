@@ -18,10 +18,6 @@ function get_assets_dir () {
 }
 
 // Return the URL of a asset located in plugin or in the active theme.
-// Also, can load an alternative version of any asset (with higher priority). The alternative version will store a text content, must be in same location and ends with `.txt`.
-// Example:
-//   - real asset: 'images/logo.png'
-//   - alternative asset: 'images/logo.png.txt' (will override if exists)
 function get_asset_url ( $file_path ) {
 	$theme_folder = '/plugins/' . config_get( 'SLUG' ) . '/' . config_get( 'ASSETS_DIR' );
 	$paths = [
@@ -36,11 +32,7 @@ function get_asset_url ( $file_path ) {
 	];
 
 	foreach ( $paths as $type => $base_path ) {
-		$alt = $file_path . '.txt';
-		if ( \file_exists( "$base_path/$alt" ) ) {
-			return $urls[ $type ] . "/$alt";
-		}
-		elseif ( \file_exists( "$base_path/$file_path" ) ) {
+		if ( \file_exists( "$base_path/$file_path" ) ) {
 			return $urls[ $type ] . "/$file_path";
 		}
 	}
