@@ -17,6 +17,6 @@ function get_asset_url ( $file_path ) {
 }
 
 function get_assets_dir () {
-	$dir = h\config_get( 'ROOT_DIR' ) . '/' . h\config_get( 'ASSETS_DIR' );
+	$dir = config_get( 'ROOT_DIR' ) . '/' . config_get( 'ASSETS_DIR' );
 	return \apply_filters( prefix( 'assets_dir' ), $dir );
 }
