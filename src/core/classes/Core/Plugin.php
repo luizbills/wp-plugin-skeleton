@@ -25,8 +25,7 @@ final class Plugin {
 
 		// include the helpers
 		require_once $root . '/core/load_helpers.php';
-		// set Config options
-		Config::setup( $main_file );
+		Config::setup( $main_file ); // set Config options
 		$this->whoops(); // Whoops error handler
 
 		// set loadable classes
