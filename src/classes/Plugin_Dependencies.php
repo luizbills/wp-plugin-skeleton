@@ -8,7 +8,7 @@ use src_namespace__\Common\Hooker_Trait;
 final class Plugin_Dependencies {
 	use Hooker_Trait;
 
-	public function __boot () {
+	public function __pre_boot () {
 		$this->add_filter( h\prefix( 'plugin_dependencies' ), 'set_dependencies' );
 		$this->add_action( h\prefix( 'handle_missing_dependencies' ), 'print_errors' );
 	}
