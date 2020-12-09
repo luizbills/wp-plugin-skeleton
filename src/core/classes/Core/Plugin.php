@@ -45,7 +45,9 @@ final class Plugin {
 	}
 
 	public function boot () {
-		h\load_classes( 'boot' );
+		if ( Dependencies::validate() ) {
+			h\load_classes( 'boot' );
+		}
 	}
 
 	public function init () {
