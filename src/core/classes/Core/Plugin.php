@@ -21,24 +21,25 @@ final class Plugin {
 	}
 
 	protected function __construct ( $main_file ) {
-		$root = \dirname( $main_file );
+		$root = \dirname( $main_file ); // plugin root dir
+
+		// include the helpers
 		require_once $root . '/core/load_helpers.php';
-		
+		// set Config options
 		Config::setup( $main_file );
-		
-		$this->whoops();
-		$this->pre_boot();
-		$this->add_hooks();
+		$this->whoops(); // Whoops error handler
 
+		// set loadable classes
 		require_once $root . '/load.php';
+		// call loader methods
 		require_once $root . '/core/load_classes.php';
-	}
 
-	public function pre_boot () {
-		h\load_classes( 'pre_boot' );
+		$this->add_hooks(); // init the plugin
 	}
 
 	protected function add_hooks () {
+		h\load_classes( 'pre_boot' );
+
 		$this->add_action( 'plugins_loaded', 'boot' );
 		$this->add_action( 'init', 'load_plugin_textdomain', 0 );
 		$this->add_action( 'init', 'init' );
@@ -51,7 +52,7 @@ final class Plugin {
 	}
 
 	public function init () {
-		if ( Dependencies::validate() ) {
+		if ( Dependencies::validate( false ) ) {
 			h\load_classes( 'init' );
 			\do_action( h\prefix( 'after_init' ) );
 		}
