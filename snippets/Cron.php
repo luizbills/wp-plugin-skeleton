@@ -12,7 +12,7 @@ final class Schedule_Event {
 
 	public static function __deactivation () {
 		$schedule_action = h\prefix( self::ACTION );
-		$timestamp = wp_next_scheduled( $schedule_action );
+		$timestamp = \wp_next_scheduled( $schedule_action );
 		\wp_unschedule_event( $timestamp, $schedule_action );
 	}
 
