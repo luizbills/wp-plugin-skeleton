@@ -18,8 +18,7 @@ final class Schedule_Event {
 
 	public function __boot () {
 		// $this->add_filter( 'cron_schedules', 'add_cron_interval' );
-		
-    $schedule_action = h\prefix( self::ACTION );
+		$schedule_action = h\prefix( self::ACTION );
 		if ( ! \wp_next_scheduled( $schedule_action ) ) {
 			\wp_schedule_event( time(), 'hourly', $schedule_action );
 		}
