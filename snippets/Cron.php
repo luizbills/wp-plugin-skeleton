@@ -30,7 +30,7 @@ final class Schedule_Event {
 	}
 	
 	public function get_recurrence () {
-		return ''hourly';
+		return 'hourly';
 	}
 
 	public function callback () {
