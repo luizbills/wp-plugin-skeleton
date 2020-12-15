@@ -24,9 +24,11 @@ abstract class Abstract_Post_Type {
 		}
 	}
 
+	// call this method on __init
 	public function register_post_type () {
-		// call this method on __init
-		\register_post_type( $this->get_slug(), $this->get_args() );
+		$args = $this->get_args();
+		$args['labels'] = $this->get_labels();
+		\register_post_type( $this->get_slug(), $args );
 	}
 
 	public function get_id () {
@@ -39,7 +41,7 @@ abstract class Abstract_Post_Type {
 
 		$data['ID'] = $post_id;
 		$data['post_type'] = $this->get_slug();
-		$post_id = $new ? \wp_insert_post( $data ) : wp_update_post( $data );
+		$post_id = $new ? \wp_insert_post( $data ) : \wp_update_post( $data );
 
 		if ( $new ) $this->post = h\get_post_by_type( $post_id, $this->get_slug() );
 
