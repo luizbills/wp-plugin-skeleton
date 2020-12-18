@@ -96,7 +96,7 @@ function to_seconds ( $amount, $period = 'minutes' ) {
 	];
 
 	throw_if(
-		! isset( $period, $time_periods ),
+		! isset( $time_periods[ $period ] ),
 		"unknown \"$period\" period passed in " . __FUNCTION__
 	);
 
