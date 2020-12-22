@@ -19,10 +19,11 @@ final class Plugin_Dependencies {
 			$required_version = $this->get_required_php_version();
 
 			if ( $required_version && ! $this->compare_version( $server_version, $required_version ) ) {
-				return esc_html__(
+				$message = __(
 					"Upgrade your PHP version to $required_version or later.",
-					'{{plugin_text_domain}}'
+					'wc-improved-checkout'
 				);
+				return \v( $message, 'safe_html', 'raw' );
 			}
 		};
 
