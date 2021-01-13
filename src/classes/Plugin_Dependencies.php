@@ -21,11 +21,24 @@ final class Plugin_Dependencies {
 			if ( $required_version && ! $this->compare_version( $server_version, $required_version ) ) {
 				$message = __(
 					"Upgrade your PHP version to $required_version or later.",
-					'wc-improved-checkout'
+					'{{plugin_text_domain}}'
 				);
 				return \v( $message, 'safe_html', 'raw' );
 			}
 		};
+		
+		// $deps['woocommerce'] = function () {
+		// 	if ( ! function_exists( 'WC' ) ) {
+		// 		$message = __(
+		// 			sprintf(
+		// 				'Install and activate the %s plugin.',
+		// 				'<strong>WooCommerce</strong>'
+		// 			),
+		// 			'{{plugin_text_domain}}'
+		// 		);
+		// 		return \v( $message, 'safe_html', 'raw' );
+		// 	}
+		// };
 
 		return $deps;
 	}
