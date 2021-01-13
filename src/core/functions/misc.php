@@ -103,7 +103,7 @@ function to_seconds ( $amount, $period = 'minutes' ) {
 	return $amount * $time_periods[ $period ];
 }
 
-function get_hash  ( $data = null, $add_random = true ) {
+function get_hash ( $data = null, $add_random = true ) {
 	$data = (array) \json_encode( $data );
 	if ( $add_random ) $data[] = \random_int( PHP_INT_MIN, PHP_INT_MAX );
 	return \hash( 'sha256', \implode( ',', $data ) );
