@@ -60,8 +60,6 @@ function log ( ...$args ) {
 }
 
 function dd ( $value ) {
-	echo '<pre>';
 	\function_exists( 'dump' ) ? \dump( $value ) : \var_dump( $value);
-	echo '</pre>';
 	die(1);
 }
