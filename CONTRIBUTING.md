@@ -10,7 +10,7 @@ define( 'WP_DEBUG_DISPLAY', true );
 define( 'WP_DEBUG_LOG', true );
 ```
 
-- First, create a new git branch
+- Then, create a new git branch
 - **Make your changes**
 - *create a `src/dev.php` to test your changes (see `src/dev-sample.php`).*
 - Open your terminal and run the following commands:
