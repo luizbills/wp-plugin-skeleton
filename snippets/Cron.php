@@ -5,7 +5,7 @@ namespace {ns};
 use {ns}\functions as h;
 use {ns}\Common\Hooker_Trait;
 
-final class Schedule_Event {
+final class Cron {
 	use Hooker_Trait;
 
 	const ACTION = '__CHANGE_ME__';
