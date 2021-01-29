@@ -58,14 +58,14 @@ function forget_cache ( $key, $default = null ) {
 	return $default;
 }
 
-function clear_plugin_cache () {
+function clear_plugin_cache ( $prefix = '' ) {
 	if ( \wp_using_ext_object_cache() ) {
 		logf( 'External Object Cache detected. Cache NOT cleared.' );
 		return;
 	}
 
 	global $wpdb;
-	$prefix = get_cache_key_prefix();
+	$prefix = get_cache_key_prefix() . $prefix;
 
 	$wpdb->query(
 		$wpdb->prepare(
