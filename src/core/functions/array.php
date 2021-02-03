@@ -2,7 +2,7 @@
 
 namespace src_namespace__\functions;
 
-function wrap ( $value ) {
+function array_wrap ( $value ) {
 	return \is_array( $value ) ? $value : [ $value ];
 }
 
