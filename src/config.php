@@ -7,7 +7,7 @@ return [
 	'LANGUAGES_DIR' => 'languages',
 	
 	// optional
-	// 'SLUG' => 'your-custom-slug',
+	// 'SLUG' => '{{plugin_slug}}',
 
 	// disable the plugin cache while in development or debugging
 	'DISABLE_CACHE' => WP_DEBUG,
