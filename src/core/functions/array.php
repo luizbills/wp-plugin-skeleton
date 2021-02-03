@@ -7,7 +7,15 @@ function array_wrap ( $value ) {
 }
 
 function array_get ( $arr, $key, $default = null ) {
-	return isset( $arr[ $key ] ) ? $arr[ $key ] : $default;
+	$keys = array_wrap( $key );
+	foreach ( $keys as $k) {
+		if (is_array( $arr ) && isset( $arr[ $k ] ) ) {
+			$arr = $arr[ $k ];
+		} else {
+			return $default;
+		}
+	}
+	return $arr;
 }
 
 function array_head ( $arr ) {
