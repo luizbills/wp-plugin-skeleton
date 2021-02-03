@@ -76,6 +76,7 @@ $find_replace = [
 	'{{plugin_author_uri}}' => substr( $values['Plugin Author URL'], 0, 4 ) === 'http' ? $values['Plugin Author URL'] : 'https://' . $values['Plugin Author URL'],
 	'{{plugin_text_domain}}' => $values['Plugin Text Domain'],
 	'{{plugin_version}}' => $values['Version'],
+	'{{plugin_slug}}' => slugify( $values['Plugin Name'] ),
 ];
 
 // useful informations
