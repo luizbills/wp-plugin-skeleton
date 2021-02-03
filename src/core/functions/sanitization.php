@@ -19,7 +19,7 @@ function sanitize ( $fields, $filters, $defaults = [] ) {
 	\v_set_context( get_v_context() );
 	foreach ( $filters as $key => $filter ) {
 		$value = array_get( $fields, $key, '' );
-		$filter = wrap( $filter );
+		$filter = array_wrap( $filter );
 
 		if ( 'array' == gettype( $value ) ) {
 			$result[ $key ] = [];
