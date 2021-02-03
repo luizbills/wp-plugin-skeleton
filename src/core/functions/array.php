@@ -34,7 +34,7 @@ function array_only ( $arr, $keys ) {
 	return \array_intersect_key( $arr, \array_flip( (array) $keys ) );
 }
 
-function array_group_by_prefix ( $arr, $prefix ) {
+function array_filter_by_prefix ( $arr, $prefix ) {
 	$group = [];
 	foreach ( $arr as $key => $value ) {
 		if ( str_starts_with( $key, $prefix ) ) {
