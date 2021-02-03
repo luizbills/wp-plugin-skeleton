@@ -3,7 +3,7 @@
 namespace src_namespace__\functions;
 
 function all_equal ( $values, $target, $strict = false ) {
-	foreach ( wrap( $values ) as $value ) {
+	foreach ( array_wrap( $values ) as $value ) {
 		$comparison = $strict ? $target !== $value : $target != $value;
 		if ( $comparison ) return false;
 	}
@@ -11,7 +11,7 @@ function all_equal ( $values, $target, $strict = false ) {
 }
 
 function any_equal ( $values, $target, $strict = false ) {
-	foreach ( wrap( $values ) as $value ) {
+	foreach ( array_wrap( $values ) as $value ) {
 		$comparison = $strict ? $target === $value : $target == $value;
 		if ( $comparison ) return true;
 	}
