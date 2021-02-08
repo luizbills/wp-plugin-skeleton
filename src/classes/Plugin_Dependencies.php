@@ -19,8 +19,8 @@ final class Plugin_Dependencies {
 			$required_version = $this->get_required_php_version();
 
 			if ( $required_version && ! $this->compare_version( $server_version, $required_version ) ) {
-				$message = __(
-					"Upgrade your PHP version to $required_version or later.",
+				$message = \__(
+					"Atualize a versão do PHP para $required_version ou mais recente.",
 					'{{plugin_text_domain}}'
 				);
 				return \v( $message, 'safe_html', 'raw' );
@@ -30,7 +30,7 @@ final class Plugin_Dependencies {
 		// $deps['woocommerce'] = function () {
 		// 	if ( ! function_exists( 'WC' ) ) {
 		// 		$message = __(
-		// 			sprintf(
+		// 			\sprintf(
 		// 				'Install and activate the %s plugin.',
 		// 				'<strong>WooCommerce</strong>'
 		// 			),
@@ -46,13 +46,22 @@ final class Plugin_Dependencies {
 	public function print_errors ( $errors ) {
 		\add_action( 'admin_notices', function () use ( $errors ) {
 			$name = h\config_get( 'NAME' );
-			$message = '<strong>' . \esc_html__( "Missing requirements for $name. Please follow this instructions:" ) . '</strong>';
+			$message = __(
+				sprintf(
+					'Não foi possível ativar o plugin %s. Siga essas instruções:',
+					$name
+				),
+				'{{plugin_text_domain}}'
+			);
+			$message = '<strong>' . $message . '</strong>';
+			
 			foreach ( $errors as $error ) {
-				$message .= sprintf( '<br>%s%s', \str_repeat( '&nbsp;', 4 ), $error );
+				$message .= \sprintf( '<br>%s%s', \str_repeat( '&nbsp;', 4 ), $error );
 			}
+			
 			h\include_php_template( 'admin-notice.php', [
 				'class' => 'error',
-				'message' => $message,
+				'message' => \v( $message, 'safe_html', 'raw' ),
 			] );
 		});
 	}
