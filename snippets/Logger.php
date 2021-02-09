@@ -5,9 +5,10 @@ namespace {ns};
 use {ns}\functions as h;
 use Monolog\Logger as MonologLogger;
 use Monolog\Handler\RotatingFileHandler;
+use Monolog\Formatter\LineFormatter;
 
 // requirements: composer require monolog/monolog
-// usage: https://github.com/Seldaek/monolog/blob/2.2.0/doc/01-usage.md#adding-extra-data-in-the-records
+// usage: https://github.com/Seldaek/monolog/blob/2.2.0/doc/01-usage.md
 final class Logger {
 	protected static $logger = null;
 
@@ -17,9 +18,11 @@ final class Logger {
 				$format = "[%datetime%] %level_name% %message% %context% %extra%\n";
 				$formatter = new LineFormatter( $format );
 				$logger = new MonologLogger( $name );
+				$maxFiles = \apply_filters( h\prefix( 'rotating_logs_max_files' ), 7, $name );
 				$handler = new RotatingFileHandler(
 					h\config_get( 'ROOT_DIR' ) . "/logs/$name.log",
-					\WP_DEBUG ? MonologLogger::DEBUG : MonologLogger::WARNING
+					$maxFiles,
+					\WP_DEBUG ? MonologLogger::DEBUG : MonologLogger::ERROR
 				);
 
 				$handler->setFormatter( $formatter );
