@@ -6,7 +6,8 @@ use {ns}\functions as h;
 use Monolog\Logger as MonologLogger;
 use Monolog\Handler\RotatingFileHandler;
 
-// Requires: composer require monolog/monolog
+// requirements: composer require monolog/monolog
+// usage: https://github.com/Seldaek/monolog/blob/2.2.0/doc/01-usage.md#adding-extra-data-in-the-records
 final class Logger {
 
 	public static function open ( $filename = 'debug' ) {
@@ -15,7 +16,7 @@ final class Logger {
 			$logger->pushHandler(
 				new RotatingFileHandler(
 					h\config_get( 'ROOT_DIR' ) . "/logs/$filename.log",
-					MonologLogger::DEBUG
+					\WP_DEBUG ? MonologLogger::DEBUG : MonologLogger::WARNING
 				)
 			);
 			return $logger;
@@ -24,3 +25,4 @@ final class Logger {
 		}
 	}
 }
+
