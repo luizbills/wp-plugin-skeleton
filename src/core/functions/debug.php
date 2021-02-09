@@ -20,14 +20,15 @@ function handle_exception ( \Throwable $exception, $callback = null ) {
 	$error_prefix = "[$slug-error";
 
 	if ( str_starts_with( $message, $error_prefix ) ) {
-		$parts = \explode( ']', $message );
+		$glue = ']';
+		$parts = \explode( $glue, $message );
 
 		// get error id
 		$pattern = '/^' . \preg_quote( $error_prefix, '/' ) . '-?/';
 		$error_id = \preg_replace( $pattern, '', \array_shift( $parts ) );
 
 		// get message
-		$error_message = \implode( ']', $parts );
+		$error_message = trim( \implode( $glue, $parts ) );
 
 		// handle
 		$http_code = is_callable( $callback)
