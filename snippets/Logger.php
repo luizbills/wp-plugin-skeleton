@@ -22,7 +22,7 @@ final class Logger {
 				$handler = new RotatingFileHandler(
 					h\config_get( 'ROOT_DIR' ) . "/logs/$name.log",
 					$maxFiles,
-					\WP_DEBUG ? MonologLogger::DEBUG : MonologLogger::ERROR
+					h\get_defined( 'WP_DEBUG' ) ? MonologLogger::DEBUG : MonologLogger::ERROR
 				);
 
 				$handler->setFormatter( $formatter );
