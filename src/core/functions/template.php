@@ -50,7 +50,7 @@ function get_v_context () {
 	return \apply_filters( prefix( 'v_context' ), config_get( 'SLUG' ) );
 }
 
-function register_custom_v_filters () {
+function __register_custom_v_filters () {
 	if ( config_get( 'custom_v_filters_registered', false ) ) {
 		return;
 	}
@@ -91,4 +91,4 @@ function register_custom_v_filters () {
 		$context
 	);
 }
-\add_action( 'plugins_loaded', __NAMESPACE__ . '\\register_custom_v_filters', 0 );
+\add_action( 'plugins_loaded', __NAMESPACE__ . '\\__register_custom_v_filters', 0 );
