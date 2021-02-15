@@ -1,7 +1,7 @@
 {
 	"require": {
 		"php": "^7.3",
-		"luizbills/v": "0.*"
+		"luizbills/v": "^1.0"
 	},
 	"require-dev": {
 		"filp/whoops": "^2.5",
