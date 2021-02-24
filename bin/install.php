@@ -77,6 +77,7 @@ $find_replace = [
 	'{{plugin_text_domain}}' => $values['Plugin Text Domain'],
 	'{{plugin_version}}' => $values['Version'],
 	'{{plugin_slug}}' => slugify( $values['Plugin Name'] ),
+	'{{plugin_prefix}}' => prefixify( $values['Plugin Name'] ),
 ];
 
 // useful informations
