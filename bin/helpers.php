@@ -16,6 +16,10 @@ function slugify ( $text ) {
 	return $sanitized_text;
 }
 
+function prefixify ( $text ) {
+	return str_replace( '-', '_', slugify( $text ) ) . '_';
+}
+
 // clear terminal screen
 function cls () {
 	print( "\033[2J\033[;H" );
