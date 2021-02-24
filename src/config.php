@@ -12,6 +12,7 @@ return [
 	'TEMPLATES_DIR' => 'templates',
 	'LANGUAGES_DIR' => 'languages',
 	'SLUG' => '{{plugin_slug}}',
+	// 'PREFIX' => '{{plugin_prefix}}'
 
 	// disable the plugin cache while in development or debugging
 	'DISABLE_CACHE' => WP_DEBUG,
