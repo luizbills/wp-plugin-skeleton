@@ -7,7 +7,7 @@ use Monolog\Logger as MonologLogger;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Formatter\LineFormatter;
 
-// requirements: composer require monolog/monolog
+// requirements: composer require monolog/monolog:2.2
 // usage: https://github.com/Seldaek/monolog/blob/2.2.0/doc/01-usage.md
 final class Logger {
 	protected static $loggers = [];
