@@ -2,7 +2,7 @@
 
 namespace src_namespace__\functions;
 
-function throw_if ( $condition, $message, $error_code = 500 ) {
+function throw_if ( $condition, $message, $error_code = 400 ) {
 	if ( $condition ) {
 		if ( \is_callable( $message ) ) {
 			$message = $message();
