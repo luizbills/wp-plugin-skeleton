@@ -76,9 +76,12 @@ function clear_plugin_cache ( $prefix = '' ) {
 		// non-Multisite stores site transients in the options table.
 		$wpdb->query(
 			$wpdb->prepare(
-				"DELETE a FROM {$wpdb->options} a
-				WHERE a.option_name LIKE %s",
+				"DELETE a, b
+				FROM {$wpdb->options} a, {$wpdb->options} b
+				WHERE a.option_name LIKE %s
+				AND b.option_name LIKE %s",
 				$wpdb->esc_like( "_transient_$prefix" ) . '%',
+				$wpdb->esc_like( "_transient_timeout_$prefix" ) . '%'
 			)
 		);
 		logf( 'Cache cleared!' );
@@ -86,9 +89,12 @@ function clear_plugin_cache ( $prefix = '' ) {
 		// Multisite stores site transients in the sitemeta table.
 		$wpdb->query(
 			$wpdb->prepare(
-				"DELETE a FROM {$wpdb->sitemeta} a
-				WHERE a.option_name LIKE %s",
+				"DELETE a, b
+				FROM {$wpdb->sitemeta} a, {$wpdb->sitemeta} b
+				WHERE a.option_name LIKE %s
+				AND b.option_name LIKE %s",
 				$wpdb->esc_like( "_site_transient_$prefix" ) . '%',
+				$wpdb->esc_like( "_site_transient_timeout_$prefix" ) . '%'
 			)
 		);
 		logf( 'Cache cleared! (multisite)' );
