@@ -5,7 +5,7 @@ namespace {ns};
 use {ns}\functions as h;
 use {ns}\Common\Hooker_Trait;
 
-class REST_Endpoint {
+final class REST_Endpoint {
 	use Hooker_Trait;
 
 	public function __init () {
@@ -14,11 +14,11 @@ class REST_Endpoint {
 
 	public function register_endpoint ( $data ) {
 		// DOC: https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/
-		\register_rest_route( 'prefix/v1', '/action', array(
+		\register_rest_route( 'prefix/v1', '/action', [
 			'methods' => 'POST',
 			'callback' => [ $this, 'handle_post_request' ],
 			'permission_callback' => '__return_true',
-		) );
+		] );
 	}
 
 	public function handle_post_request ( \WP_REST_Request $req ) {
