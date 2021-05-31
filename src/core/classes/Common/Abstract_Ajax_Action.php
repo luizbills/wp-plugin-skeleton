@@ -80,7 +80,7 @@ abstract class Abstract_Ajax_Action {
 					'Forbidden Access.'
 				);
 				$this->send_json_error(
-					__( 'Forbidden Access.', 'reunidas-user-updater' ),
+					$message,
 					403
 				);
 			}
