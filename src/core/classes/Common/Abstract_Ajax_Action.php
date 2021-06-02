@@ -98,27 +98,27 @@ abstract class Abstract_Ajax_Action {
 		);
 	}
 
-	protected function send_json_error ( $error_message, $status_code = 400 ) {
-		$this->send_json( null, $error_message, $status_code );
+	protected function send_json_error ( $error_message, $http_code = 400 ) {
+		$this->send_json( null, $error_message, $http_code );
 	}
 
-	protected function send_json_success ( $data, $status_code = 200 ) {
-		$this->send_json( $data, null, $status_code );
+	protected function send_json_success ( $data, $http_code = 200 ) {
+		$this->send_json( $data, null, $http_code );
 	}
 
-	protected function send_json ( $data, $error_message = '', $status_code = null ) {
+	protected function send_json ( $data, $error_message = '', $http_code = null ) {
 		$response = [];
 		if ( empty( $error_message ) ) {
-			$status_code = $status_code ? $status_code : 200;
+			$http_code = $http_code ? $http_code : 200;
 		} else {
-			$status_code = $status_code ? $status_code : 400;
+			$http_code = $http_code ? $http_code : 400;
 			$response['error_message'] = $error_message;
 		}
-		$response['success'] = $status_code >= 200 && $status_code < 300;
+		$response['success'] = $http_code >= 200 && $http_code < 300;
 		$response['data'] = $data;
 		$response['meta'] = [
-			'status_code' => $status_code
+			'http_code' => $http_code
 		];
-		\wp_send_json( $response, $status_code );
+		\wp_send_json( $response, $http_code );
 	}
 }
