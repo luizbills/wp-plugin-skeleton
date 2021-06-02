@@ -65,7 +65,7 @@ class Asset_Manager {
 				$allowed_args = \array_keys( $this->get_defaults( $type ) );
 				\extract( h\array_only( $args, $allowed_args ) );
 
-				if ( $is_admin !== $in_admin ) continue;
+				if ( $in_admin !== null && $is_admin !== $in_admin ) continue;
 				if ( ! call_user_func( $condition ) ) continue;
 
 				$this->enqueued = true;
