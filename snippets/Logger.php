@@ -12,7 +12,7 @@ use Monolog\Formatter\LineFormatter;
 final class Logger {
 	protected static $loggers = [];
 
-	public static function open ( $name = 'debug' ) {
+	public static function open ( $name = 'debug', $level = null ) {
 		if ( ! isset( self::$loggers[ $name ] ) ) {
 			try {
 				$format = "[%datetime%] %level_name% %message% %context% %extra%\n";
@@ -20,11 +20,11 @@ final class Logger {
 				$logger = new MonologLogger( $name );
 				$maxFiles = \apply_filters( h\prefix( 'rotating_logs_max_files' ), 7, $name );
 				$debug_log = \apply_filters( h\prefix( 'debug_log' ), h\get_defined( 'WP_DEBUG' ), $name );
-				$filename = h\config_get( 'ROOT_DIR' ) . '/' . h\config_get( 'LOGS_DIR', 'logs' ) . "/$name.log";
+				$filename = self::get_dir() . "/$name.log";
 				$handler = new RotatingFileHandler(
 					$filename,
 					$maxFiles,
-					$debug_log ? MonologLogger::DEBUG : MonologLogger::ERROR
+					$level ? $level : ( \WP_DEBUG ? MonologLogger::DEBUG : MonologLogger::ERROR )
 				);
 
 				$handler->setFormatter( $formatter );
@@ -36,5 +36,9 @@ final class Logger {
 			}
 		}
 		return self::$loggers[ $name ];
+	}
+
+	public static function get_dir () {
+		return h\config_get( 'ROOT_DIR' ) . '/logs';
 	}
 }
