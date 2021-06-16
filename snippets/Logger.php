@@ -21,16 +21,13 @@ final class Logger {
 				$maxFiles = \apply_filters( h\prefix( 'rotating_logs_max_files' ), 7, $name );
 				$debug_log = \apply_filters( h\prefix( 'debug_log' ), h\get_defined( 'WP_DEBUG' ), $name );
 				$filename = self::get_dir() . "/$name.log";
-				$handler = new RotatingFileHandler(
-					$filename,
-					$maxFiles,
-					$level ? $level : ( \WP_DEBUG ? MonologLogger::DEBUG : MonologLogger::ERROR )
-				);
+				$level = $level ? $level : ( \WP_DEBUG ? MonologLogger::DEBUG : MonologLogger::ERROR );
+				$handler = new RotatingFileHandler( $filename, $maxFiles, $level );
 
 				$handler->setFormatter( $formatter );
 				$logger->pushHandler( $handler );
 
-				self::$loggers[ $name ] = \apply_filters( h\prefix( 'get_logger' ), $logger, $name );
+				self::$loggers[ $name ] = \apply_filters( h\prefix( 'get_logger' ), $logger, $name, $level );
 			} catch ( \Throwable $e ) {
 				h\logf( 'Can\'t initialize Monolog\\Logger class: ' . $e->getMessage() );
 			}
