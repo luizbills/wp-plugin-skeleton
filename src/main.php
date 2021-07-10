@@ -5,6 +5,7 @@ Version: {{plugin_version}}
 Description: {{plugin_description}}
 Author: {{plugin_author}}
 Author URI: {{plugin_author_uri}}
+Update URI: false
 
 Text Domain: {{plugin_text_domain}}
 Domain Path: /languages
