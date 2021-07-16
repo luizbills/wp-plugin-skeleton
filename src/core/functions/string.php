@@ -75,10 +75,22 @@ function str_add_quotes ( $string, $double = true ) {
 }
 
 /**
- * Apply a "non strict" mask  in a string. Use "X" in mask to symbolize the characters.
+ * Apply a "non strict" mask in a string. Use "X" in mask to symbolize the characters.
  * Example: str_mask( 'XXXX-XX-XX', '20191004' ); // outputs '2019-10-04'
  */
-function str_mask ( $mask , $string ) {
-    $mask = \str_replace( 'X', '%s', $mask );
-    return \vsprintf( $mask, \str_split( $string ) );
+function str_mask ( $mask, $val ) {
+	$result = '';
+	$k = 0;
+	for ( $i = 0; $i < \strlen( $mask ); ++$i ) {
+		if ( $mask[ $i ] == 'X' ) {
+			if ( isset( $val[ $k ] )) {
+				$result .= $val[ $k++ ];
+			}
+		} else {
+			if ( isset( $mask[ $i ] ) ) {
+				$result .= $mask[ $i ];
+			}
+		}
+	}
+	return $result;
 }
