@@ -37,6 +37,6 @@ function get_asset_url ( $file_path ) {
 		}
 	}
 
-	logf( "Can't find asset template file: $file_path" );
+	logf( "Can't find asset file: $file_path" );
 	return false;
 }
