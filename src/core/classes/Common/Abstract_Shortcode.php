@@ -7,22 +7,12 @@ use src_namespace__\functions as h;
 abstract class Abstract_Shortcode {
 	use Hooker_Trait;
 
-	abstract public function get_shortcode_name ();
-	abstract public function get_output ( $atts, $content );
-
 	public function __init () {
 		\add_shortcode( $this->get_shortcode_name() , [ $this, 'callback' ] );
 	}
 
-	public function callback ( $atts, $content = '', $tag = '' ) {
-		$atts = empty( $atts ) ? [] : $atts;
-		$atts = \array_merge( $this->get_default_attributes(), $atts );
-		$validate = $this->validate_attributes( $atts );
-		if ( true === $validate ) {
-			return $this->get_output( $atts, $content );
-		}
-		return h\user_is_admin() ? "<div class='shortcode-$tag-error'>$validate</div>" : '';
-	}
+	abstract public function get_shortcode_name ();
+	abstract public function get_output ( $atts, $content );
 
 	public function get_default_attributes () {
 		return [];
@@ -30,7 +20,17 @@ abstract class Abstract_Shortcode {
 
 	public function validate_attributes ( $atts ) {
 		// should returns true on success
-		// or an error string on failure 
+		// or an error message on failure
 		return true;
+	}
+
+	public function callback ( $atts, $content = null, $name = null ) {
+		$atts = empty( $atts ) ? [] : $atts;
+		$atts = \shortcode_atts( $this->get_default_attributes(), $atts, $name );
+		$validate = $this->validate_attributes( $atts );
+		if ( true === $validate ) {
+			return $this->get_output( $atts, $content );
+		}
+		return h\user_is_admin() ? "<div class='shortcode-$name-error'>$validate</div>" : '';
 	}
 }
