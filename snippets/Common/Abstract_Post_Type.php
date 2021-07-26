@@ -4,9 +4,26 @@ namespace {ns}\Common;
 
 use {ns}\functions as h;
 
+
 abstract class Abstract_Post_Type {
+	use Hooker_Trait;
 
 	protected $post = null;
+
+	public function __construct ( $post_id = 0 ) {
+		if ( $post_id > 0 ) {
+			$this->post = h\get_post_by_type( $post_id, $this->get_slug() );
+		}
+	}
+
+	public function __init () {
+		$this->register_post_type();
+
+		// overwrites this callbacks to add new admin columns
+		$post_type = $this->get_slug();
+		$this->add_filter( "manage_{$post_type}_posts_columns", 'set_admin_columns' );
+		$this->add_action( "manage_{$post_type}_posts_custom_column" , 'render_admin_column', 10, 2 );
+	}
 
 	// Post type key. Must not exceed 20 characters
 	// and should only contain lowercase alphanumeric characters, dashes, and underscores.
@@ -18,13 +35,12 @@ abstract class Abstract_Post_Type {
 	// see https://developer.wordpress.org/reference/functions/get_post_type_labels/#description
 	abstract public function get_labels ();
 
-	public function __construct ( $post_id = 0 ) {
-		if ( $post_id > 0 ) {
-			$this->post = h\get_post_by_type( $post_id, $this->get_slug() );
-		}
+	public function set_admin_columns ( $col ) {
+		return $cols;
 	}
 
-	// call this method on __init
+	public function render_admin_column ( $col, $post_id ) {}
+
 	public function register_post_type () {
 		$args = $this->get_args();
 		$args['labels'] = $this->get_labels();
@@ -53,6 +69,10 @@ abstract class Abstract_Post_Type {
 		return $this->post;
 	}
 
+	public function get_post_status () {
+		return $this->post ? $this->post->post_status : false;
+	}
+
 	public function get_meta ( $key, $single = true ) {
 		return \get_post_meta( $this->get_id(), $key, $single );
 	}
@@ -64,7 +84,11 @@ abstract class Abstract_Post_Type {
 	public function add_meta ( $key, $value ) {
 		return \add_post_meta( $this->get_id(), $key, $value );
 	}
-	
+
+	public function delete_meta ( $key, $value = '' ) {
+		return \delete_post_meta( $this->get_id(), $key, $value );
+	}
+
 	public function delete ( $bypass_trash = false ) {
 		return $bypass_trash ? \wp_delete_post( $this->get_id(), true ) : \wp_trash_post(  $this->get_id() );
 	}
