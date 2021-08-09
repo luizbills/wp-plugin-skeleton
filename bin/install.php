@@ -70,7 +70,7 @@ cls();
 $find_replace = [
 	'src_namespace__' => $values['PHP Namespace'],
 	'{{composer_namespace}}' => str_replace('\\', '\\\\', $values['PHP Namespace'] ) . '\\\\',
-	'{{plugin_name}}' => $values['Plugin Name'],
+	'{{plugin_name}}' => filter_var( $values['Plugin Name'], FILTER_SANITIZE_STRING ),
 	'{{plugin_description}}' => $values['Plugin Description'],
 	'{{plugin_author}}' => $values['Plugin Author'],
 	'{{plugin_author_uri}}' => substr( $values['Plugin Author URL'], 0, 4 ) === 'http' ? $values['Plugin Author URL'] : 'https://' . $values['Plugin Author URL'],
