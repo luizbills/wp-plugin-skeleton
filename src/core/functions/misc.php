@@ -80,8 +80,13 @@ function ns ( $include ) {
 	return config_get( 'NAMESPACE_BASE' ) . $include;
 }
 
-function get_current_url () {
-	return ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? "https" : "http" ) . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+function get_current_url ( $args = false ) {
+	global $wp;
+	$host = $_SERVER['HTTP_HOST'];
+	$path = $wp->request;
+	$protocol = isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+	$url = "$protocol://$host/$path";
+	return $args ? \add_query_arg( $_GET, $url ) : $url;
 }
 
 function to_seconds ( $amount, $period = 'minutes' ) {
