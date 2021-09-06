@@ -18,11 +18,9 @@ if ( ! defined( 'WPINC' ) ) die();
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-\src_namespace__\Core\Plugin::run( __FILE__ );
-
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
-	\WC_Konduto\Core\Plugin::run( __FILE__ );
+	\src_namespace__\Core\Plugin::run( __FILE__ );
 } else {
 	\add_action( 'admin_notices', function () {
 		echo "<div class='notice notice-error'><p><strong>{{plugin_name}}</strong> can't be initialized because the Composer dependencies were not installed.</p></div>";
