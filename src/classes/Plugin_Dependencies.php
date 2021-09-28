@@ -15,26 +15,23 @@ final class Plugin_Dependencies {
 
 	public function set_dependencies ( $deps ) {
 		$deps['php'] = function () {
-			$server_version = $this->sanitize_version( \PHP_VERSION );
-			$required_version = $this->get_required_php_version();
+			$php_server_version = $this->sanitize_version( \PHP_VERSION );
+			$php_required_version = $this->get_required_php_version();
 
-			if ( $required_version && ! $this->compare_version( $server_version, $required_version ) ) {
-				$message = \__(
-					"Atualize a versão do PHP para $required_version ou mais recente.",
-					'{{plugin_text_domain}}'
+			if ( $php_required_version && ! $this->compare_version( $php_server_version, $php_required_version ) ) {
+				$message = \sprintf(
+					__( "Atualize a versão do PHP para %s ou mais recente.", 'wc-netcred' ),
+					$php_required_version
 				);
 				return \v( $message, 'safe_html', 'raw' );
 			}
 		};
-		
+
 		// $deps['woocommerce'] = function () {
 		// 	if ( ! function_exists( 'WC' ) ) {
-		// 		$message = __(
-		// 			\sprintf(
-		// 				'Install and activate the %s plugin.',
-		// 				'<strong>WooCommerce</strong>'
-		// 			),
-		// 			'{{plugin_text_domain}}'
+		// 		$message = \sprintf(
+		// 			__( 'Instale e ative o plugin %s.', 'wc-netcred' ),
+		// 			'<strong>WooCommerce</strong>'
 		// 		);
 		// 		return \v( $message, 'safe_html', 'raw' );
 		// 	}
