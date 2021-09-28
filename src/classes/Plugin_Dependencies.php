@@ -20,7 +20,7 @@ final class Plugin_Dependencies {
 
 			if ( $php_required_version && ! $this->compare_version( $php_server_version, $php_required_version ) ) {
 				$message = \sprintf(
-					__( "Atualize a versão do PHP para %s ou mais recente.", 'wc-netcred' ),
+					__( "Atualize a versão do PHP para %s ou mais recente.", '{{plugin_text_domain}}' ),
 					$php_required_version
 				);
 				return \v( $message, 'safe_html', 'raw' );
@@ -30,7 +30,7 @@ final class Plugin_Dependencies {
 		// $deps['woocommerce'] = function () {
 		// 	if ( ! function_exists( 'WC' ) ) {
 		// 		$message = \sprintf(
-		// 			__( 'Instale e ative o plugin %s.', 'wc-netcred' ),
+		// 			__( 'Instale e ative o plugin %s.', '{{plugin_text_domain}}' ),
 		// 			'<strong>WooCommerce</strong>'
 		// 		);
 		// 		return \v( $message, 'safe_html', 'raw' );
@@ -43,19 +43,16 @@ final class Plugin_Dependencies {
 	public function print_errors ( $errors ) {
 		\add_action( 'admin_notices', function () use ( $errors ) {
 			$name = h\config_get( 'NAME' );
-			$message = __(
-				sprintf(
-					'Não foi possível ativar o plugin %s. Siga essas instruções:',
-					$name
-				),
-				'{{plugin_text_domain}}'
+			$message = sprintf(
+				__( 'Não foi possível ativar o plugin %s. Siga as instruções abaixo:', '{{plugin_text_domain}}' ),
+				$name
 			);
-			$message = '<strong>' . $message . '</strong>';
-			
+			$message = "<strong>$message</strong>";
+
 			foreach ( $errors as $error ) {
 				$message .= \sprintf( '<br>%s%s', \str_repeat( '&nbsp;', 4 ), $error );
 			}
-			
+
 			h\include_php_template( 'admin-notice.php', [
 				'class' => 'error',
 				'message' => \v( $message, 'safe_html', 'raw' ),
