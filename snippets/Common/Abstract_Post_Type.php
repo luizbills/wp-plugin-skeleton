@@ -34,7 +34,7 @@ abstract class Abstract_Post_Type {
 	// see https://developer.wordpress.org/reference/functions/get_post_type_labels/#description
 	abstract public function get_labels ();
 
-	public function set_admin_columns ( $col ) {
+	public function set_admin_columns ( $cols ) {
 		return $cols;
 	}
 
