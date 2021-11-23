@@ -4,7 +4,6 @@ namespace {ns}\Common;
 
 use {ns}\functions as h;
 
-
 abstract class Abstract_Post_Type {
 	use Hooker_Trait;
 
