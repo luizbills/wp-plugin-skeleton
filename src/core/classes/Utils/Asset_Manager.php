@@ -103,6 +103,7 @@ class Asset_Manager {
 				'$slug' => h\config_get( 'SLUG' ),
 				'$debug' => h\get_defined( 'WP_DEBUG' ),
 				'$nonces' => h\get_ajax_nonces(),
+				'$logged_in' => \is_user_logged_in(),
 			];
 			echo "<!-- Script Data of $plugin_name plugin -->";
 			\printf(
