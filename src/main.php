@@ -21,6 +21,11 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	\src_namespace__\Core\Plugin::run( __FILE__ );
 } else {
 	\add_action( 'admin_notices', function () {
-		echo "<div class='notice notice-error'><p><strong>{{plugin_name}}</strong> can't be initialized because the Composer dependencies were not installed.</p></div>";
+		list( $plugin_name ) = \get_file_data( __FILE__, [ 'plugin name' ] );
+		$message = sprintf( 
+			__( '%s can\'t be initialized because the Composer dependencies were not installed. Reinstall the plugin or run <code>composer install</code>.', '{{plugin_text_domain}}' ),
+			"<strong>$plugin_name</strong>"
+		);
+		echo "<div class='notice notice-error'><p>$message</p></div>";
 	} );
 }
