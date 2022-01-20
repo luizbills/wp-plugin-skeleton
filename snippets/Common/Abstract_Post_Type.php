@@ -24,6 +24,14 @@ abstract class Abstract_Post_Type {
 		$this->add_action( "manage_{$post_type}_posts_custom_column" , 'render_admin_column', 10, 2 );
 	}
 
+	// Define this static method to help query posts
+	// public static function query ( $args, $return_results = true ) {
+	// 	$cpt = new self();
+	// 	$args['post_type'] = $cpt->get_slug();
+	// 	$query = new \WP_Query( $args );
+	// 	return $return_results ? $query->get_posts() : $query;
+	// }
+
 	// Post type key. Must not exceed 20 characters
 	// and should only contain lowercase alphanumeric characters, dashes, and underscores.
 	abstract public function get_slug ();
