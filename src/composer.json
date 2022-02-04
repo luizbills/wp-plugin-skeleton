@@ -1,6 +1,6 @@
 {
 	"require": {
-		"php": "^7.3",
+		"php": "^7.4",
 		"luizbills/v": "^1.0"
 	},
 	"require-dev": {
