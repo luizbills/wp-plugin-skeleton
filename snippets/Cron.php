@@ -41,9 +41,9 @@ final class Cron {
 	}
 
 	// public function add_cron_interval ( $schedules ) {
-	// 	$schedules[ 'every_1_minute' ] = [
+	// 	$schedules[ 'every_minute' ] = [
 	// 		'interval' => 1 * \MINUTE_IN_SECONDS,
-	// 		'display' => \esc_html__( 'Every 1 minute' )
+	// 		'display' => \__( 'Every minute' )
 	// 	];
 	// 	return $schedules;
 	// }
