@@ -2,7 +2,7 @@
 
 namespace src_namespace__\functions;
 
-function throw_if ( $condition, $message, $error_code = 400 ) {
+function throw_if ( $condition, $message, $error_code = -1 ) {
 	if ( $condition ) {
 		if ( \is_callable( $message ) ) {
 			$message = $message();
@@ -13,7 +13,7 @@ function throw_if ( $condition, $message, $error_code = 400 ) {
 	return $condition;
 }
 
-function handle_exception ( \Throwable $exception, $callback = null ) {
+function handle_exception ( \Throwable $exception ) {
 	$message = $exception->getMessage();
 	$slug = config_get( 'SLUG' );
 	$error_prefix = "[$slug-error]";
