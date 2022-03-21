@@ -9,7 +9,7 @@ function array_wrap ( $value ) {
 function array_get ( $arr, $key, $default = null ) {
 	$keys = array_wrap( $key );
 	foreach ( $keys as $k) {
-		if (is_array( $arr ) && isset( $arr[ $k ] ) ) {
+		if ( is_array( $arr ) && isset( $arr[ $k ] ) ) {
 			$arr = $arr[ $k ];
 		} else {
 			return $default;
