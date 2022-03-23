@@ -25,15 +25,15 @@ final class Cron {
 			\wp_schedule_event( time(), $this->get_recurrence(), $cron_action );
 		}
 	}
-	
+
 	public function __init () {
 		$this->add_action( self::get_action(), 'callback' );
 	}
-	
+
 	public function get_recurrence () {
 		return 'hourly';
 	}
-	
+
 	// public function add_cron_interval ( $schedules ) {
 	// 	$schedules[ 'every_minute' ] = [
 	// 		'interval' => 1 * \MINUTE_IN_SECONDS,
@@ -41,7 +41,7 @@ final class Cron {
 	// 	];
 	// 	return $schedules;
 	// }
-	
+
 	public function callback () {
 		h\logf( 'Triggered cron action' );
 	}
