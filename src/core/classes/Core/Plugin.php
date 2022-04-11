@@ -61,7 +61,7 @@ final class Plugin {
 		\load_plugin_textdomain(
 			'{{plugin_text_domain}}',
 			false,
-			\dirname( h\config_get( 'ROOT_DIR' ) ) . '/languages/'
+			\dirname( \plugin_basename( h\config_get( 'MAIN_FILE' ) ) ) . '/languages/'
 		);
 	}
 
